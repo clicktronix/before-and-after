@@ -115,34 +115,12 @@ namespace WebApplication.Models
         public virtual IList<Post> Posts
         { get; set; }
     }
-
-    public partial class Image
-    {
-        [Key]
-        public int Id
-        { get; set; }
-
-        public string ImageName
-        { get; set; }
-
-        public string ImagePath
-        { get; set; }
-
-        public string Description
-        { get; set; }
-
-        public int Size
-        { get; set; }
-
-        public byte[] ImageData
-        { get; set; }
-    }
-
+    
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public DbSet<Post> Posts { get; set; }
         public DbSet<Tag> Tags { get; set; }
-        public DbSet<Image> Images { get; set; }
+        public DbSet<Photo> Photos { get; set; }
         public ApplicationDbContext() : base("PrimaryConnectionString", throwIfV1Schema: false) { }
 
         public static ApplicationDbContext Create()

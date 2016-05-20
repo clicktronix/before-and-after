@@ -210,9 +210,8 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Config\ImageConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\BaseController.cs" />
-    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Global.asax.cs">
@@ -221,6 +220,8 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\PagedList.cs" />
+    <Compile Include="Models\Photo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -229,6 +230,8 @@
     <Content Include="App_Data\BeforeAndAfter_log.ldf">
       <DependentUpon>BeforeAndAfter.mdf</DependentUpon>
     </Content>
+    <Content Include="Content\bootstrap-image-gallery.css" />
+    <Content Include="Content\bootstrap-image-gallery.min.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -286,6 +289,8 @@
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
     <None Include="Scripts\jquery-2.2.3.intellisense.js" />
+    <Content Include="Scripts\bootstrap-image-gallery.js" />
+    <Content Include="Scripts\bootstrap-image-gallery.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-2.2.3.js" />
@@ -316,7 +321,7 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\AddPhoto.cshtml" />
+    <Content Include="Views\Home\Gallery.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
@@ -341,8 +346,7 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Service References\Application Insights\ConnectedService.json" />
     <Content Include="Views\Account\DisplayEmail.cshtml" />
-    <Content Include="Views\Error\Index.cshtml" />
-    <Content Include="Views\Error\NotFoundPage.cshtml" />
+    <None Include="Views\Home\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -354,7 +358,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\Images\" />
-    <Folder Include="Views\Base\" />
+    <Folder Include="Files\thumbs\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
