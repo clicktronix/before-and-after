@@ -19,14 +19,13 @@ namespace WebApplication.Config
                 finalSize = new Size((int)(tempval * imageSize.Width), (int)(tempval * imageSize.Height));
             }
             else
-                finalSize = imageSize; // image is already small size
+                finalSize = imageSize;
 
             return finalSize;
         }
 
         public void SaveToFolder(Image img, string fileName, string extension, Size newSize, string pathToSave)
         {
-            // Get new resolution
             Size imgSize = NewImageSize(img.Size, newSize);
             using (Image newImg = new Bitmap(img, imgSize.Width, imgSize.Height))
             {

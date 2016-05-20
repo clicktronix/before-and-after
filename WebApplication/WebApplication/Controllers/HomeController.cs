@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using WebApplication.Config;
 using WebApplication.Models;
 
 namespace WebApplication.Controllers
@@ -31,11 +31,9 @@ namespace WebApplication.Controllers
                         .Skip((page - 1) * pageSize)
                         .Take(pageSize)
                         .ToList();
-
-            // Count
+            
             records.TotalRecords = _db.Photos
                             .Where(x => filter == null || (x.Description.Contains(filter))).Count();
-
             records.CurrentPage = page;
             records.PageSize = pageSize;
 
@@ -59,6 +57,8 @@ namespace WebApplication.Controllers
         [Authorize]
         public ActionResult Create(Photo photo, IEnumerable<HttpPostedFileBase> files)
         {
+            ImageConfig save = new ImageConfig();
+
             if (!ModelState.IsValid)
                 return View(photo);
             if (files.Count() == 0 || files.FirstOrDefault() == null)
@@ -80,49 +80,16 @@ namespace WebApplication.Controllers
                 {
                     model.ThumbPath = String.Format("/Files/thumbs/{0}{1}", fileName, extension);
                     model.ImagePath = String.Format("/Files/{0}{1}", fileName, extension);
-
-                    // Save thumbnail size image, 100 x 100
-                    SaveToFolder(img, fileName, extension, new Size(100, 100), model.ThumbPath);
-
-                    // Save large size image, 800 x 800
-                    SaveToFolder(img, fileName, extension, new Size(600, 600), model.ImagePath);
+                    
+                    save.SaveToFolder(img, fileName, extension, new Size(100, 100), model.ThumbPath);
+                    
+                    save.SaveToFolder(img, fileName, extension, new Size(600, 600), model.ImagePath);
                 }
-
-                // Save record to database
                 model.CreatedOn = DateTime.Now;
                 _db.Photos.Add(model);
                 _db.SaveChanges();
             }
             return PartialView();
-        }
-
-        public Size NewImageSize(Size imageSize, Size newSize)
-        {
-            Size finalSize;
-            double tempval;
-            if (imageSize.Height > newSize.Height || imageSize.Width > newSize.Width)
-            {
-                if (imageSize.Height > imageSize.Width)
-                    tempval = newSize.Height / (imageSize.Height * 1.0);
-                else
-                    tempval = newSize.Width / (imageSize.Width * 1.0);
-
-                finalSize = new Size((int)(tempval * imageSize.Width), (int)(tempval * imageSize.Height));
-            }
-            else
-                finalSize = imageSize; // image is already small size
-
-            return finalSize;
-        }
-
-        private void SaveToFolder(Image img, string fileName, string extension, Size newSize, string pathToSave)
-        {
-            // Get new resolution
-            Size imgSize = NewImageSize(img.Size, newSize);
-            using (Image newImg = new Bitmap(img, imgSize.Width, imgSize.Height))
-            {
-                newImg.Save(Server.MapPath(pathToSave), img.RawFormat);
-            }
         }
     }
 }

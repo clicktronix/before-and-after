@@ -222,6 +222,8 @@
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\PagedList.cs" />
     <Compile Include="Models\Photo.cs" />
+    <Compile Include="Models\Post.cs" />
+    <Compile Include="Models\Tag.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>

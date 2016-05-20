@@ -9,6 +9,9 @@ namespace WebApplication.Models
     public class Photo
     {
         [Key]
+        public int Id { get; set; }
+
+        [Key]
         public int PhotoId { get; set; }
 
         [Display(Name = "Decription")]
