@@ -63,7 +63,13 @@ namespace WebApplication.Controllers
                 return View(photo);
             if (files.Count() == 0 || files.FirstOrDefault() == null)
             {
-                ViewBag.error = "Please choose a file";
+                ViewBag.error = "Пожалуйста, выберите файлы";
+                return View(photo);
+            }
+
+            if (files.Count() > 1 || files.FirstOrDefault() == null)
+            {
+                ViewBag.error = "Можно загрузить только 1 файл";
                 return View(photo);
             }
 
@@ -74,22 +80,44 @@ namespace WebApplication.Controllers
 
                 model.Description = photo.Description;
                 var fileName = Guid.NewGuid().ToString();
-                var extension = Path.GetExtension(file.FileName).ToLower();
-
-                using (var img = Image.FromStream(file.InputStream))
+                var s = Path.GetExtension(file.FileName);
+                if (s != null)
                 {
-                    model.ThumbPath = String.Format("/Files/thumbs/{0}{1}", fileName, extension);
-                    model.ImagePath = String.Format("/Files/{0}{1}", fileName, extension);
+                    var extension = s.ToLower();
+
+                    using (var img = Image.FromStream(file.InputStream))
+                    {
+                        model.ThumbPath = string.Format("/Files/thumbs/{0}{1}", fileName, extension);
+                        model.ImagePath = string.Format("/Files/{0}{1}", fileName, extension);
                     
-                    save.SaveToFolder(img, fileName, extension, new Size(100, 100), model.ThumbPath);
+                        save.SaveToFolder(img, fileName, extension, new Size(100, 100), model.ThumbPath);
                     
-                    save.SaveToFolder(img, fileName, extension, new Size(600, 600), model.ImagePath);
+                        save.SaveToFolder(img, fileName, extension, new Size(600, 600), model.ImagePath);
+                    }
                 }
                 model.CreatedOn = DateTime.Now;
                 _db.Photos.Add(model);
                 _db.SaveChanges();
             }
             return PartialView();
+        }
+
+        [HttpGet]
+        public ActionResult Search()
+        {
+            return PartialView("_Search");
+        }
+
+        [HttpPost]
+        public ActionResult Search(string searchString = null)
+        {
+            ViewBag.Search = searchString;
+            if (!string.IsNullOrWhiteSpace(searchString))
+            {
+                var list = SearchEngine.Search(searchString, _db.Users).AsQueryable();
+                return PartialView("_Search", list);
+            }
+            return PartialView("_Search");
         }
     }
 }

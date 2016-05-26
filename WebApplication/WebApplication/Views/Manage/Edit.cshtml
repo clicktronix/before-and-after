@@ -1,0 +1,16 @@
+﻿@using WebApplication.Models
+
+@model EditViewModel
+@{
+    ViewBag.Title = "Управление";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>Управление</h2>
+@using (Html.BeginForm("Edit", "Manage", FormMethod.Post))
+{
+    @Html.EditorFor(model => model.Name)
+    @Html.EditorFor(model => model.Surname)
+    @Html.EditorFor(model => model.Email)
+
+    <input type="submit" value="Save" />
+}

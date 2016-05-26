@@ -1,0 +1,43 @@
+﻿@model IEnumerable<WebApplication.Models.ApplicationUser>
+@{
+    ViewBag.Title = "Поиск";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var searchString = (string)ViewBag.Search;
+}
+
+<style>
+    .modal-content {
+        width: 600px !important;
+        margin: 120px auto !important;
+        margin-bottom: 0;
+    }
+</style>
+
+<div class="modal-body">
+    <h2>Поиск</h2>
+    @using (Html.BeginForm("Search", "Home", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        if (Model != null)
+        {
+            <table class="table">
+                @foreach (var item in Model.ToList())
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UserName)
+                        </td>
+                    </tr>
+                }
+            </table>
+        }
+    }
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        $('#approve-btn').click(function () {
+            $('#modal-container').modal('hide');
+        });
+    });
+</script>

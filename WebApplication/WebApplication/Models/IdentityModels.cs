@@ -6,6 +6,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using WebApplication.Models;
 
 namespace WebApplication.Models
 {
@@ -13,32 +14,33 @@ namespace WebApplication.Models
     //Дополнительные сведения см. по адресу: http://go.microsoft.com/fwlink/?LinkID=317594.
     public class ApplicationUser : IdentityUser
     {
-        public int PostsCount
-        { get; set; }
+        public int PostsCount { get; set; }
 
-        public int SubscribersCount
-        { get; set; }
+        public int SubscribersCount { get; set; }
 
-        public int SubscriptionCount
-        { get; set; }
+        public int SubscriptionCount { get; set; }
 
-        public DateTime? Age
-        { get; set; }
+        public DateTime? Age { get; set; }
 
-        public string Gender
-        { get; set; }
+        public string Gender { get; set; }
 
-        public string Name
-        { get; set; }
+        public string Name { get; set; }
 
-        public string Surname
-        { get; set; }
+        public string Surname { get; set; }
 
-        public string Country
-        { get; set; }
+        public string FullName => Name + " " + Surname;
 
-        public string City
-        { get; set; }
+        public string Country { get; set; }
+
+        public string City { get; set; }
+
+        public virtual ICollection<FollowUser> FollowFromUser { get; set; }
+
+        public virtual ICollection<FollowUser> FollowToUser { get; set; }
+
+        public virtual ICollection<Photo> Photos { get; set; }
+
+        public bool Activated { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
@@ -50,17 +52,18 @@ namespace WebApplication.Models
             return userIdentity;
         }
     }
-    
+
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
-        public DbSet<Post> Posts { get; set; }
-        public DbSet<Tag> Tags { get; set; }
-        public DbSet<Photo> Photos { get; set; }
         public ApplicationDbContext() : base("PrimaryConnectionString", throwIfV1Schema: false) { }
 
         public static ApplicationDbContext Create()
         {
             return new ApplicationDbContext();
         }
+
+        public DbSet<Post> Posts { get; set; }
+        public DbSet<Tag> Tags { get; set; }
+        public DbSet<Photo> Photos { get; set; }
     }
 }

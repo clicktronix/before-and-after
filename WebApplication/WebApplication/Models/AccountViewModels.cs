@@ -86,7 +86,7 @@ namespace WebApplication.Models
         public string Gender { get; set; }
 
         [Required]
-        [Display(Name = "Возраст")]
+        [Display(Name = "Дата рождения")]
         [DataType(DataType.Date), DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? Age { get; set; }
 

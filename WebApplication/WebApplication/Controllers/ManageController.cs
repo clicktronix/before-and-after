@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -13,6 +14,7 @@ namespace WebApplication.Controllers
     [Authorize]
     public class ManageController : Controller
     {
+        readonly ApplicationDbContext _db = new ApplicationDbContext();
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
@@ -320,6 +322,30 @@ namespace WebApplication.Controllers
             }
             var result = await UserManager.AddLoginAsync(User.Identity.GetUserId(), loginInfo.Login);
             return result.Succeeded ? RedirectToAction("ManageLogins") : RedirectToAction("ManageLogins", new { Message = ManageMessageId.Error });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(ApplicationUser userProfile, EditViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                string username = User.Identity.Name;
+                ApplicationUser user = _db.Users.FirstOrDefault(u => u.UserName.Equals(username));
+            
+                user.Name = userProfile.Name;
+                user.Surname = userProfile.Surname;
+                user.Email = userProfile.Email;
+                user.Age = userProfile.Age;
+                user.Country = userProfile.Country;
+                user.City = userProfile.City;
+
+                _db.Entry(user).State = EntityState.Modified;
+
+                _db.SaveChanges();
+                return View(model);
+            }
+            return View(model);
         }
 
         protected override void Dispose(bool disposing)

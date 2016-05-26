@@ -17,15 +17,15 @@
                        value="@ViewBag.filter"
                        class="form-control"
                        style="display: inline"
-                       placeholder="Search" />
+                       placeholder="Описание фото" />
                 <span class="input-group-btn">
-                    <button class="btn btn-default" type="submit">Go</button>
+                    <button class="btn btn-default" type="submit">Поиск</button>
                 </span>
             </div>
         </div>
         <div class="pull-right col-lg-1">
             <a>
-                @Html.ActionLink("Add", "Create", "Home", FormMethod.Post, new { @class = "modal-link btn btn-success" })
+                @Html.ActionLink("Добавить", "Create", "Home", FormMethod.Post, new { @class = "modal-link btn btn-success" })
             </a>
         </div>
     </div>
@@ -94,4 +94,4 @@
             columns: grid.Columns());
         }
     </div>
-            }
+}

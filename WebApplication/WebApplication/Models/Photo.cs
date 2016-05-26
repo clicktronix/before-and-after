@@ -1,20 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
 
 namespace WebApplication.Models
 {
     public class Photo
     {
         [Key]
-        public int Id { get; set; }
-
-        [Key]
         public int PhotoId { get; set; }
 
-        [Display(Name = "Decription")]
+        [Display(Name = "Описание")]
         [Required]
         public string Description { get; set; }
 

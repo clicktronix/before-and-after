@@ -1,6 +1,8 @@
-﻿@model WebApplication.Models.IndexViewModel
+﻿@using WebApplication.Models
+@model WebApplication.Models.IndexViewModel
 @{
     ViewBag.Title = "Управление";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>@ViewBag.Title.</h2>
@@ -23,10 +25,10 @@
             }
             ]
         </dd>
-        <dt>Внешние имена входа:</dt>
+        <dt>Профиль:</dt>
         <dd>
-            @Model.Logins.Count [
-            @Html.ActionLink("Управление", "ManageLogins") ]
+            [
+            @Html.ActionLink("Управление", "Edit") ]
         </dd>
         @*
             Номера телефонов можно использовать в качестве второго проверочного фактора для системы двухфакторной проверки подлинности.
@@ -56,13 +58,13 @@
                 }
             </dd>
         *@
-        <dt>Двухфакторная проверка подлинности:</dt>
+        @*<dt>Двухфакторная проверка подлинности:</dt>
         <dd>
             <p>
                 Поставщики двухфакторной проверки подлинности не настроены. В <a href="http://go.microsoft.com/fwlink/?LinkId=403804">этой статье</a>
                 вы можете узнать, как настроить двухфакторную проверку подлинности в этом приложении ASP.NET.
             </p>
-            @*@if (Model.TwoFactor)
+            @if (Model.TwoFactor)
                 {
                     using (Html.BeginForm("DisableTwoFactorAuthentication", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
                     {
@@ -81,7 +83,7 @@
                         <input type="submit" value="Включить" class="btn btn-link" />
                         </text>
                     }
-                }*@
-        </dd>
+                }
+        </dd>*@
     </dl>
 </div>
