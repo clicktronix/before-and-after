@@ -1,5 +1,4 @@
 ﻿using System.Drawing;
-using System.Drawing.Imaging;
 using System.Web;
 
 namespace WebApplication.Config
@@ -30,7 +29,7 @@ namespace WebApplication.Config
             Size imgSize = NewImageSize(img.Size, newSize);
             using (Image newImg = new Bitmap(img, imgSize.Width, imgSize.Height))
             {
-                newImg.Save(HttpContext.Current.Server.MapPath("~/Files"), ImageFormat.Jpeg);
+                newImg.Save(HttpContext.Current.Server.MapPath(pathToSave), img.RawFormat);
             }
         }
     }

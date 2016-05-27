@@ -323,28 +323,36 @@ namespace WebApplication.Controllers
             var result = await UserManager.AddLoginAsync(User.Identity.GetUserId(), loginInfo.Login);
             return result.Succeeded ? RedirectToAction("ManageLogins") : RedirectToAction("ManageLogins", new { Message = ManageMessageId.Error });
         }
+        
+        public ActionResult Edit()
+        {
+            return View();
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(ApplicationUser userProfile, EditViewModel model)
         {
+            
+            string username = User.Identity.Name;
+            ApplicationUser user = _db.Users.FirstOrDefault(u => u.UserName.Equals(username));
+
             if (!ModelState.IsValid)
             {
-                string username = User.Identity.Name;
-                ApplicationUser user = _db.Users.FirstOrDefault(u => u.UserName.Equals(username));
-            
-                user.Name = userProfile.Name;
-                user.Surname = userProfile.Surname;
-                user.Email = userProfile.Email;
-                user.Age = userProfile.Age;
-                user.Country = userProfile.Country;
-                user.City = userProfile.City;
-
                 _db.Entry(user).State = EntityState.Modified;
-
                 _db.SaveChanges();
-                return View(model);
+                return RedirectToAction("Index");
             }
+
+            user.Name = userProfile.Name;
+            user.Surname = userProfile.Surname;
+            user.Age = userProfile.Age;
+            user.Country = userProfile.Country;
+            user.City = userProfile.City;
+
+            _db.Entry(user).State = EntityState.Modified;
+            _db.SaveChanges();
+            
             return View(model);
         }
 

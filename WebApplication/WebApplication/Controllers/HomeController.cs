@@ -50,7 +50,7 @@ namespace WebApplication.Controllers
         public ActionResult Create()
         {
             var photo = new Photo();
-            return View(photo);
+            return View("Gallery", photo);
         }
 
         [HttpPost]
@@ -64,12 +64,6 @@ namespace WebApplication.Controllers
             if (files.Count() == 0 || files.FirstOrDefault() == null)
             {
                 ViewBag.error = "Пожалуйста, выберите файлы";
-                return View(photo);
-            }
-
-            if (files.Count() > 1 || files.FirstOrDefault() == null)
-            {
-                ViewBag.error = "Можно загрузить только 1 файл";
                 return View(photo);
             }
 
@@ -99,7 +93,7 @@ namespace WebApplication.Controllers
                 _db.Photos.Add(model);
                 _db.SaveChanges();
             }
-            return PartialView();
+            return View("Gallery");
         }
 
         [HttpGet]

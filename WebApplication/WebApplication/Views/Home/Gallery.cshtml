@@ -10,7 +10,7 @@
 @using (Html.BeginForm("index", null, FormMethod.Get))
 {
     <div class="row">
-        <div class="col-sm-8">
+        <div class="col-sm-4">
             <div class="input-group">
                 <input type="text"
                        name="filter"
@@ -23,7 +23,7 @@
                 </span>
             </div>
         </div>
-        <div class="pull-right col-lg-1">
+        <div class="col-sm-4">
             <a>
                 @Html.ActionLink("Добавить", "Create", "Home", FormMethod.Post, new { @class = "modal-link btn btn-success" })
             </a>
@@ -66,32 +66,36 @@
         </div>
     </div>
 
-    <div style="margin-top: 17px;">
-        <div id="links">
-            @foreach (var item in Model.Content)
-            {
-                <a href="@item.ImagePath" title="@item.Description" data-gallery>
-                    <img src="@item.ThumbPath" alt="@item.Description" class="img-rounded" style="margin-bottom:7px;" />
-                </a>
-            }
-        </div>
-    </div>
-
-    <div>
+    @:<div style="margin-top: 17px;">
+    <div id="links">
         @{
-            var grid = new WebGrid(
-                        canPage: true,
-                        rowsPerPage: Model.PageSize,
-                        canSort: true,
-                        ajaxUpdateContainerId: "grid");
+            if (Model != null)
+            {
+                foreach (var item in Model.Content)
+                {
+                    <a href="@item.ImagePath" title="@item.Description" data-gallery>
+                        <img src="@item.ThumbPath" alt="@item.Description" class="img-rounded" style="margin-bottom:7px;" />
+                    </a>
+                }
+                @:</div>
+                @:</div>
 
-            grid.Bind(Model.Content, rowCount: Model.TotalRecords, autoSortAndPage: false);
-            grid.Pager(WebGridPagerModes.All);
+                @:<div>
+        
+                var grid = new WebGrid(
+                    canPage: true,
+                    rowsPerPage: Model.PageSize,
+                    canSort: true,
+                    ajaxUpdateContainerId: "grid");
 
-            @grid.GetHtml(htmlAttributes: new { id = "grid" },
-            fillEmptyRows: false,
-            mode: WebGridPagerModes.All,
-            columns: grid.Columns());
-        }
+                grid.Bind(Model.Content, rowCount: Model.TotalRecords, autoSortAndPage: false);
+                grid.Pager(WebGridPagerModes.All);
+
+                @grid.GetHtml(htmlAttributes: new { id = "grid" },
+                    fillEmptyRows: false,
+                    mode: WebGridPagerModes.All,
+                    columns: grid.Columns())
+            }
+        } 
     </div>
 }
