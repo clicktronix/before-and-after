@@ -13,11 +13,11 @@
 </style>
 
 <div class="modal-body">
-    <h2>Загрузить изображения</h2>
+    
     @using (Html.BeginForm("Create", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
         @Html.AntiForgeryToken()
-
+        <h2>Загрузить изображения</h2>
         <div class="form-horizontal">
 
             <div class="form-group">
@@ -35,7 +35,7 @@
             <div class="form-group">
                 <div class="col-sm-offset-3">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
-                    <button type="submit" id="approve-btn" class="btn btn-primary">Сохранить</button>
+                    <button type="submit" href ="Gallery" id="approve-btn" class="btn btn-primary">Сохранить</button>
                     <div style="color: red">
                         @ViewBag.error
                     </div>

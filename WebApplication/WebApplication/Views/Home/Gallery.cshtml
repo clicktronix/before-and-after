@@ -1,7 +1,8 @@
-﻿@model WebApplication.Models.PagedList<WebApplication.Models.Photo>
+﻿@using System.Web.Razor.Parser.SyntaxTree
+@model WebApplication.Models.PagedList<WebApplication.Models.Photo>
 
 @{
-    ViewBag.Title = "Image Gallery";
+    ViewBag.Title = "Галлерея";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -17,7 +18,7 @@
                        value="@ViewBag.filter"
                        class="form-control"
                        style="display: inline"
-                       placeholder="Описание фото" />
+                       placeholder="Описание изображения" />
                 <span class="input-group-btn">
                     <button class="btn btn-default" type="submit">Поиск</button>
                 </span>
@@ -25,7 +26,7 @@
         </div>
         <div class="col-sm-4">
             <a>
-                @Html.ActionLink("Добавить", "Create", "Home", FormMethod.Post, new { @class = "modal-link btn btn-success" })
+                @Html.ActionLink(" ","Create", "Home", FormMethod.Post, new {@class = "modal-link btn btn-success glyphicon glyphicon-plus"})
             </a>
         </div>
     </div>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -32,8 +33,7 @@ namespace WebApplication.Controllers
                         .Take(pageSize)
                         .ToList();
             
-            records.TotalRecords = _db.Photos
-                            .Where(x => filter == null || (x.Description.Contains(filter))).Count();
+            records.TotalRecords = _db.Photos.Count(x => filter == null || (x.Description.Contains(filter)));
             records.CurrentPage = page;
             records.PageSize = pageSize;
 
@@ -50,7 +50,7 @@ namespace WebApplication.Controllers
         public ActionResult Create()
         {
             var photo = new Photo();
-            return View("Gallery", photo);
+            return View(photo);
         }
 
         [HttpPost]
@@ -63,10 +63,16 @@ namespace WebApplication.Controllers
                 return View(photo);
             if (files.Count() == 0 || files.FirstOrDefault() == null)
             {
-                ViewBag.error = "Пожалуйста, выберите файлы";
+                ViewBag.error = "Пожалуйста, выберите файл";
                 return View(photo);
             }
 
+            if (files.Count() > 1 || files.FirstOrDefault() == null)
+            {
+                ViewBag.error = "Можно загрузить только 1 файл";
+                return View(photo);
+            }
+            
             var model = new Photo();
             foreach (var file in files)
             {
@@ -93,16 +99,10 @@ namespace WebApplication.Controllers
                 _db.Photos.Add(model);
                 _db.SaveChanges();
             }
-            return View("Gallery");
+            return RedirectToAction("Gallery", "Home");
         }
 
         [HttpGet]
-        public ActionResult Search()
-        {
-            return PartialView("_Search");
-        }
-
-        [HttpPost]
         public ActionResult Search(string searchString = null)
         {
             ViewBag.Search = searchString;

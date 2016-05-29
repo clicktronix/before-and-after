@@ -28,7 +28,9 @@
         <dt>Профиль:</dt>
         <dd>
             [
-            @Html.ActionLink("Управление", "Edit") ]
+            @*@Html.ActionLink("Управление", "Edit")*@
+            @Html.ActionLink("Управление", "Edit", "Manage", FormMethod.Post, new { @class = "modal-link" })
+            ]
         </dd>
         @*
             Номера телефонов можно использовать в качестве второго проверочного фактора для системы двухфакторной проверки подлинности.

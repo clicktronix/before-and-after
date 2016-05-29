@@ -1,39 +1,40 @@
-﻿@model IEnumerable<WebApplication.Models.ApplicationUser>
-@{
+﻿
+@model IQueryable<WebApplication.Models.ApplicationUser>
+
+    @{
     ViewBag.Title = "Поиск";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var searchString = (string)ViewBag.Search;
-}
-
-<style>
-    .modal-content {
-        width: 600px !important;
-        margin: 120px auto !important;
-        margin-bottom: 0;
     }
-</style>
+
+    <style>
+        .modal-content {
+            width: 600px !important;
+            margin: 120px auto !important;
+            margin-bottom: 0;
+        }
+    </style>
 
 <div class="modal-body">
-    <h2>Поиск</h2>
-    @using (Html.BeginForm("Search", "Home", FormMethod.Post))
+    <h1>Поиск</h1>
+    <h4>Пользователь:</h4>
+
+    @if (Model == null)
     {
-        @Html.AntiForgeryToken()
+        <div>Введите имя пользователя</div>
+    }
+    else
+    {
         if (Model != null)
         {
-            <table class="table">
-                @foreach (var item in Model.ToList())
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.UserName)
-                        </td>
-                    </tr>
-                }
-            </table>
+
+        }
+        foreach (var item in Model)
+        {
+            @Html.DisplayFor(model => item.UserName)
         }
     }
 </div>
-
+                  
 <script type="text/javascript">
     $(function () {
         $('#approve-btn').click(function () {

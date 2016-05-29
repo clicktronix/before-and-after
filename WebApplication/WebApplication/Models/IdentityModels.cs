@@ -42,6 +42,8 @@ namespace WebApplication.Models
 
         public bool Activated { get; set; }
 
+        public Gallery GalleryId { get; set; }
+
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
             // Обратите внимание, что authenticationType должен совпадать с типом, определенным в CookieAuthenticationOptions.AuthenticationType

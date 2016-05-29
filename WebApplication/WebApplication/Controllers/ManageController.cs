@@ -352,8 +352,8 @@ namespace WebApplication.Controllers
 
             _db.Entry(user).State = EntityState.Modified;
             _db.SaveChanges();
-            
-            return View(model);
+
+            return RedirectToAction("Index", "Manage", model);
         }
 
         protected override void Dispose(bool disposing)
