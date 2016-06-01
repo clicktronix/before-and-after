@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -8,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using WebApplication.Config;
 using WebApplication.Models;
+using WebApplication.Models.DomainModels;
 
 namespace WebApplication.Controllers
 {

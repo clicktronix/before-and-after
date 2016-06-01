@@ -1,0 +1,241 @@
+﻿@using WebApplication.Services
+@model WebApplication.Models.ViewModels.UserPageViewModel
+@using Microsoft.AspNet.Identity
+
+@{
+    ViewBag.Title = "UserPageOfFriend";
+    var peopleService = new PeopleService();
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/scripts")
+@Scripts.Render("~/scripts/jquery.unobtrusive-ajax.js")
+
+<style>
+    a:hover[class = "forImage"] {
+        text-decoration: none;
+    }
+
+    .paragraph {
+        margin-bottom: -3px;
+        font-size: 10px;
+    }
+</style>
+
+<div id="MessageArea">
+
+</div>
+<div class="row">
+    <div class="col-xs-5 col-sm-7 col-md-5 col-lg-4">
+        <div>
+            <img src='@Url.Content("~/Content/Images/AccountImages/" + Model.Avatar)' alt="Avatar" width="250" height="250" />
+        </div>
+        @Html.Partial("FriendshipButtonStatus", Model.Id)
+        <button type="button" class="btn btn-primary" style="width: 210px; margin: 7px 0 ;" onclick="return showMessageBox('@Model.Id')">Отправить сообщение</button>
+
+        <br />
+        <br />
+
+        <div style="height: 200px; width: 220px; margin-bottom: 45px">
+            <a class="forImage" href="~/People/CommonFriendshipList/@Model.Id">
+                <h3 style="margin: 0; background-color: lightblue; width: 220px">
+                    Общие друзья
+                    @if (ViewBag.CountOfCommonFriends > 0)
+                    {<span class="badge span_friends">@ViewBag.CountOfCommonFriends</span>}
+                </h3>
+            </a>
+
+            <br />
+
+            @foreach (var f in ViewBag.SixOrLessCommonFriends) // получение общих с другом друзей
+            {
+                <div style="float: left">
+                    <a class="forImage" href="/Account/UserPage/@f.Id">
+                        <img src='@Url.Content("~/Content/Images/AccountImages/" + f.Avatar)' alt="Avatar" width="50" height="50" />
+                        <div style="display: inline-block; width: 7px"></div>
+                    </a>
+
+                    <br />
+
+                    <a href="/Account/UserPage/@f.Id">
+                        <p class="paragraph">@f.Name</p>
+                        <p style="font-size: 10px">@f.Surname</p>
+                    </a>
+                </div>
+            }
+        </div>
+
+        <div style="height: 200px; width: 220px; margin-bottom: 45px">
+            <a class="forImage" href="~/People/FriendshipList/@Model.Id">
+                <h3 style="margin: 0; background-color: lightblue; width: 220px">
+                    Друзья
+                    @if (ViewBag.CountOfFriends > 0)
+                    {<span class="badge span_friends">@ViewBag.CountOfFriends</span>}
+                </h3>
+            </a>
+
+
+
+            <br />
+
+            @foreach (var f in ViewBag.Friends) // получение друзей друга
+            {
+                <div style="float: left">
+                    <a class="forImage" href="/Account/UserPage/@f.Id">
+                        <img src='@Url.Content("~/Content/Images/AccountImages/" + f.Avatar)' alt="Avatar" width="50" height="50" />
+                        <div style="display: inline-block; width: 7px"></div>
+                    </a>
+
+                    <br />
+
+                    <a href="/Account/UserPage/@f.Id">
+                        <p class="paragraph">@f.Name</p>
+                        <p style="font-size: 10px">@f.Surname</p>
+                    </a>
+                </div>
+            }
+        </div>
+
+        <div style="height: 200px; width: 220px">
+            <a class="forImage" href="~/People/FriendsOnlineList/@Model.Id">
+                <h3 style="margin: 0; background-color: lightblue; width: 220px">
+                    Друзья онлайн
+                    @if (ViewBag.CountOfFriendsOnline > 0)
+                    {<span class="badge span_friends">@ViewBag.CountOfFriendsOnline</span>}
+                </h3>
+            </a>
+
+            <br />
+
+            @foreach (var f in ViewBag.FriendsOnline) // получение друзей друга онлайн
+            {
+                <div style="float: left">
+                    <a class="forImage" href="/Account/UserPage/@f.Id">
+                        <img src='@Url.Content("~/Content/Images/AccountImages/" + f.Avatar)' alt="Avatar" width="50" height="50" />
+                        <div style="display: inline-block; width: 7px"></div>
+                    </a>
+
+                    <br />
+
+                    <a href="/Account/UserPage/@f.Id">
+                        <p class="paragraph">@f.Name</p>
+                        <p style="font-size: 10px">@f.Surname</p>
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+
+
+
+    <div class="col-xs-7 col-xs-offset-1 col-sm-5 col-sm-offset-0 col-md-7 col-md-offset-0 col-lg-8 col-lg-offset-0">
+        <div style="width: 400px">
+            <!--без ширины он текст про послед. активность на одной строчке не помещается-->
+            <p>
+                @Html.DisplayFor(modelItem => Model.Name)&nbsp;@Html.DisplayFor(modelItem => Model.Surname)
+                <br />
+
+                @if ((DateTime.Now - Model.DateOfActivity).Value.TotalMinutes < 3)
+                {
+                    <span style="color: mediumseagreen;">Онлайн</span>
+                }
+                else
+                {
+                    <span style="color: red;">Последняя активность @peopleService.GetDateOfActivity(Model.DateOfActivity.Value)</span>
+                }
+            </p>
+        </div>
+
+        <div style="color: lightslategray;">
+            @if (!string.IsNullOrEmpty(@Model.Status))
+            {
+                <span>@Model.Status</span>
+            }
+        </div>
+
+        <hr style="width: 550px" />
+
+        <div>
+            <table class="table-condensed">
+                <tr>
+                    <td>@Html.DisplayNameFor(modelItem => Model.DateOfBirth)</td>
+                    <td>@Model.DateOfBirth.ToString("D")</td>
+                </tr>
+                <tr>
+                    <td>@Html.DisplayNameFor(modelItem => Model.City)</td>
+                    <td>@Html.DisplayFor(modelItem => Model.City)</td>
+                </tr>
+            </table>
+        </div>
+
+        <div>
+            <table>
+                <tr>
+                    <td><h3 style="float: left">Контактная информация</h3></td>
+                </tr>
+            </table>
+        </div>
+
+        <div>
+            <table class="table-condensed">
+                <tr>
+                    <td>@Html.DisplayNameFor(modelItem => Model.Email)</td>
+                    <td>@Html.DisplayFor(modelItem => Model.Email)</td>
+                </tr>
+            </table>
+        </div>
+
+        <hr style="width: 545px" />
+
+        <a id="WallLink" style="color: lightslategray;">
+            <span>Написать на стене</span>
+        </a>
+
+        <script>
+            function ToggleRecordOnTheWall() {
+                $('#WallLink').click(function () { $('#WallInput').slideToggle("fast"); });
+            };
+
+            function HideRecordOnTheWall() {
+                $('#WallInput').slideToggle("fast");;
+            };
+
+            $(document).ready(function () {
+                $(document).ajaxStart(function () {
+                    $("#WallLoading").css("display", "block");
+                });
+
+                $(document).ajaxComplete(function () {
+                    $("#WallLoading").css("display", "none");
+                });
+                ToggleRecordOnTheWall();
+                var href = "/Event/RecordsOnTheWall?UserId=@Model.Id";
+                $.post(href, function (data, status) {
+                    if (status == "success")
+                        document.getElementById("wall").innerHTML = data;
+                    if (status == "error")
+                        alert("Error: " + status);
+                });
+            });
+        </script>
+
+        <div id="WallInput" style="display: none">
+            @using (Ajax.BeginForm("RecordOnTheWall", "Event", new {senderUserId = User.Identity.GetUserId(), recieverUserId = Model.Id}, new AjaxOptions {UpdateTargetId = "wall", OnSuccess = "HideRecordOnTheWall"}))
+            {
+                @Html.TextArea("TextOnTheWall", "", 4, 40, null)
+                <div>
+                    <input type="submit" value="Сохранить" class="navbar-left"/>
+                </div>
+            }
+        </div>
+        <hr/>
+        <p><h4>Стена</h4></p>
+        <div id="WallLoading" style="display: none; width: 50%; height: 50%;">
+            <img src='../Content/images/giff/ajax-loader-1.gif' class="table zbn" />
+        </div>
+
+        <div id="wall">
+        </div>
+    </div>
+</div>

@@ -1,0 +1,16 @@
+﻿@using Microsoft.AspNet.Identity
+@model List<WebApplication.Models.ViewModels.PeopleViewModel>
+
+@{
+    ViewBag.Title = "title";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>title</h2>
+<h2 style="text-align: center">Заявки в друзья</h2>
+<h3>@ViewBag.Result</h3>
+
+@Html.ActionLink("Список друзей", "FriendshipList", "People", new{ id = @User.Identity.GetUserId() },
+new { @class = "btn btn-primary", style = "position: absolute; left: 700px; top: 20px" })
+
+@Html.Partial("UsersList", Model)

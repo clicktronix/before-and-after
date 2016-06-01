@@ -1,0 +1,32 @@
+﻿@using Microsoft.AspNet.Identity
+@using WebApplication.Services
+@model string
+
+@{
+    PeopleService peopleService = new PeopleService();
+}
+
+
+<div style="background-color: #DBD7D7; border-radius: 3px; padding: 5px;">
+    <a href="/Account/UserPage/@Model">
+        <img src='@Url.Content("~/Content/Images/AccountImages/" + peopleService.GetUser(Model).Avatar)' alt="Avatar" width="40" height="40" />
+    </a>
+    <div>
+        <a href="/Account/UserPage/@peopleService.GetUser(Model).Id">
+            @{ ViewBag.userName = @peopleService.GetUser(Model).Name; }
+            @if (@peopleService.GetUser(Model).Name.Length > 9)
+            {
+                ViewBag.userName = @peopleService.GetUser(Model).Name.Remove(7);
+                ViewBag.userName += "...";
+            }
+            @{ ViewBag.userSurName = @peopleService.GetUser(Model).Surname; }
+            @if (@peopleService.GetUser(Model).Surname.Length > 9)
+            {
+                ViewBag.userSurName = @peopleService.GetUser(Model).Surname.Remove(7);
+                ViewBag.userSurName += "...";
+            }
+            <p style="font-size: 12px">@ViewBag.userName</p>
+            <p style="font-size: 12px; margin-top: -15px;">@ViewBag.userSurName</p>
+        </a>
+    </div>
+</div>

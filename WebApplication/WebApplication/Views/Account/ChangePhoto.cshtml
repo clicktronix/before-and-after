@@ -1,0 +1,65 @@
+﻿@model WebApplication.Models.ViewModels.UserPageViewModel
+
+@{
+    ViewBag.Title = "Change Photo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    ViewBag.Title = "Изменение фотографии.";
+}
+
+<h2>@ViewBag.Title</h2>
+@using (Html.BeginForm("ChangePhoto", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+<h4>Изменение фотографии пользователя.</h4>
+<hr />
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+
+    @Html.HiddenFor(g => g.Id)
+    @Html.HiddenFor(g => g.Email)
+    @Html.HiddenFor(g => g.Name)
+    @Html.HiddenFor(g => g.Surname)
+    @Html.HiddenFor(g => g.DateOfBirth)
+    @Html.HiddenFor(g => g.City)
+    @Html.HiddenFor(g => g.Gender)
+    @Html.HiddenFor(g => g.PhoneNumber)
+
+<div>
+    <h3>Текущая фотография:</h3>
+    <img src='@Url.Content("~/Content/Images/AccountImages/" + Model.Avatar)' alt="Avatar" width="270" height="250" />
+</div>
+<br />
+<br />
+<div>
+    <input id="inputFile" type="file" name="uploadImage" class="btn btn-primary" style="width: 270px" />
+    <h3>Новая фотография:</h3>
+    <img id="imgNew" width="270" height="250" />
+</div>
+<br />
+<div class="form-group">
+    <div style="position: absolute; left: 30px">
+        <input type="submit" name="submitButton" class="btn btn-primary" style="width: 100px" value="Сохранить" />
+    </div>
+</div>
+<div class="form-group">
+    <div style="position: absolute; left: 200px; top: 811px">
+        <input type="submit" name="submitButton" class="btn btn-primary" style="width: 100px" value="Отмена" />
+    </div>
+</div>
+}
+
+
+<script>
+    $(document).ready(function () {
+        $("#inputFile").change(function () {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $("#imgNew").attr("src", e.target.result);
+            }
+
+            reader.readAsDataURL(this.files[0]);
+        });
+    });
+</script>

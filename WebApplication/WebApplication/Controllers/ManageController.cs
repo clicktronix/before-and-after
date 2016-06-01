@@ -1,31 +1,39 @@
 ﻿using System;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using AutoMapper;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using WebApplication.Models;
+using WebApplication.Models.ViewModels;
+using System.Collections.Generic;
+using WebApplication.Services;
 
 namespace WebApplication.Controllers
 {
     [Authorize]
     public class ManageController : Controller
     {
+        private PeopleService peopleService;
         readonly ApplicationDbContext _db = new ApplicationDbContext();
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
         public ManageController()
         {
+            peopleService = new PeopleService();
         }
 
         public ManageController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
+            ViewBag.GetCountOffersFriendships = peopleService.GetCountOffersFriendships(User.Identity.GetUserId());
         }
 
         public ApplicationSignInManager SignInManager
@@ -333,8 +341,8 @@ namespace WebApplication.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(ApplicationUser userProfile, EditViewModel model)
         {
-            
             string username = User.Identity.Name;
+            
             ApplicationUser user = _db.Users.FirstOrDefault(u => u.UserName.Equals(username));
 
             if (!ModelState.IsValid)
@@ -354,6 +362,173 @@ namespace WebApplication.Controllers
             _db.SaveChanges();
 
             return RedirectToAction("Index", "Manage", model);
+        }
+
+        //Users page
+        public ActionResult UserPage(string Id, bool Welcome = false)
+        {
+            //if (Welcome) ViewBag.Welcome = true;
+            Random rand = new Random();
+            List<PeopleViewModel> friends = new List<PeopleViewModel>();
+
+            if (Id == null)
+                friends = peopleService.GetAllFriends(User.Identity.GetUserId());
+            else
+                friends = peopleService.GetAllFriends(Id);
+
+            ViewBag.CountOfFriends = friends.Count;
+
+            var friendsOnline = friends.Where(f => (f.DateOfActivity - DateTime.Now).Value.TotalMinutes > -3).ToList();
+            ViewBag.CountOfFriendsOnline = friendsOnline.Count;
+
+            var onlySixFriends = new List<PeopleViewModel>();
+
+            if (friends.Count <= 6)
+                ViewBag.Friends = friends;
+            else
+            {
+                for (var i = 0; i < 6; i++)
+                {
+                    var index = rand.Next(0, friends.Count);
+                    onlySixFriends.Add(friends[index]);
+
+                    friends.RemoveAt(index);
+                }
+
+                ViewBag.Friends = onlySixFriends;
+            }
+
+            var onlySixFriendsOnline = new List<PeopleViewModel>();
+
+            if (friendsOnline.Count <= 6)
+                ViewBag.FriendsOnline = friendsOnline;
+            else
+            {
+                for (var i = 0; i < 6; i++)
+                {
+                    var index = rand.Next(0, friendsOnline.Count);
+                    onlySixFriendsOnline.Add(friendsOnline[index]);
+
+                    friendsOnline.RemoveAt(index);
+                }
+
+                ViewBag.FriendsOnline = onlySixFriendsOnline;
+            }
+
+            // для отображения общих друзей
+            if (Id != User.Identity.GetUserId() && Id != null)
+            {
+                var commonFriends = peopleService.GetAllCommonFriends(User.Identity.GetUserId(), Id);
+                ViewBag.AllCommonFriends = commonFriends; // все общие друзья
+                ViewBag.CountOfCommonFriends = commonFriends.Count; // кол-во общих друзей
+
+                var onlySixCommonFriends = new List<PeopleViewModel>();
+
+                if (commonFriends.Count <= 6)
+                    ViewBag.SixOrLessCommonFriends = commonFriends; // для отображения 6 или меньше общих друзей
+                else
+                {
+                    for (var i = 0; i < 6; i++)
+                    {
+                        var index = rand.Next(0, commonFriends.Count);
+                        onlySixCommonFriends.Add(commonFriends[index]);
+
+                        commonFriends.RemoveAt(index);
+                    }
+
+                    ViewBag.SixOrLessCommonFriends = onlySixCommonFriends; // для отображения 6 или меньше общих друзей
+                }
+
+                ViewBag.CurrentUserId = User.Identity.GetUserId();
+            }
+            //-----------------------------
+
+            // обращаемся к AutoMapper
+            UserPageViewModel user = new UserPageViewModel();
+            if (Id == null || Id == User.Identity.GetUserId())
+            {
+                Mapper.Map(peopleService.GetUser(User.Identity.GetUserId()), user);
+                return View(user);
+            }
+            Mapper.Map(peopleService.GetUser(Id), user);
+            if (peopleService.CheckIfUserIsMyFriend(User.Identity.GetUserId(), Id))
+            {
+                return View("UserPageOfFriend", user);
+            }
+            return View("UserPageOfAnotherPerson", user);
+        }
+
+        [HttpPost]
+        public ActionResult GetStatus()
+        {
+            var status = peopleService.GetStatus(User.Identity.GetUserId());
+            return PartialView(status ?? "");
+        }
+
+        [HttpPost]
+        public ActionResult EditStatus(string status)
+        {
+            var result = peopleService.EditStatus(User.Identity.GetUserId(), status);
+
+            if (!string.IsNullOrEmpty(result))
+                return PartialView("GetStatus", result);
+
+            return PartialView("GetStatus", "Изменить статус");
+        }
+
+        public ActionResult ChangePhoto()
+        {
+            var user = peopleService.GetUser(User.Identity.GetUserId());
+            var userView = Mapper.Map<ApplicationUser, UserPageViewModel>(user);
+
+            if (user != null)
+                return View(userView);
+
+            return HttpNotFound();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ChangePhoto(string submitButton, UserPageViewModel model, HttpPostedFileBase uploadImage)
+        {
+            switch (submitButton)
+            {
+                case "Сохранить":
+                    return SaveNewPhoto(model, uploadImage);
+                case "Отмена":
+                    return Cancel();
+                default:
+                    return View();
+            }
+        }
+
+        public ActionResult Cancel()
+        {
+            return RedirectToAction("UserPage");
+        }
+
+        public ActionResult SaveNewPhoto(UserPageViewModel model, HttpPostedFileBase uploadImage)
+        {
+            Random rnd = new Random();
+
+            // тут работа с записью файла с аватаром на сервер
+            string directory = Server.MapPath(@"\Content\Images\AccountImages");
+            string fileName = null;
+
+            if (uploadImage != null && uploadImage.ContentLength > 0)
+            {
+                string tmp = Path.GetFileName(uploadImage.FileName);
+                fileName = (rnd.Next(1, 100000).ToString() + tmp.GetHashCode() + tmp.Substring(tmp.Length - 4, 4));
+                uploadImage.SaveAs(Path.Combine(directory, fileName));
+            }
+
+            if (fileName == null) return RedirectToAction("UserPage");
+            model.Avatar = fileName;
+            var currentUser = peopleService.GetUser(model.Id);
+            Mapper.Map(model, currentUser);
+            peopleService.EditUser(currentUser);
+
+            return RedirectToAction("UserPage");
         }
 
         protected override void Dispose(bool disposing)

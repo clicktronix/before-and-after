@@ -1,0 +1,60 @@
+﻿@model IEnumerable<SocialNetworkWithIdentity.Models.DomainModels.Message>
+@using Microsoft.AspNet.Identity
+
+@{var currentDate = "";
+var currentUser = ""; ;}
+
+<div class="prokrutka" id="skrol">
+    @foreach (var item in Model)
+    {
+        if (currentDate != item.Date.ToLongDateString())
+        {
+            if (currentDate != "")
+            {
+                <div class="row text-center" style="border-bottom: 1px solid #ccc; color: #808080; margin-bottom: 5px; ">
+                    Сегодня
+                </div>
+            }
+            else
+            {
+                <div class="row text-center" style="border-bottom: 1px solid #ccc; color: #808080; margin-bottom: 5px;">
+                    @item.Date.ToLongDateString()
+                </div>
+            }
+            currentDate = item.Date.ToLongDateString();
+            currentUser = "";
+        }
+        <div class="row">
+            @if (currentUser != item.Sender.Id)
+            {
+                <div class="col-sm-2 col-md-1 col-lg-1">
+                    <img src='@Url.Content("~/Content/Images/AccountImages/" + item.Sender.Avatar)' alt="Hello" width="50" height="50" /><br />
+                </div>
+                <div class="col-sm-8 col-md-9 col-lg-9">
+                    <a href="../Account/UserPage/@item.Sender.Id">
+                        @item.Sender.Name
+                    </a><br />
+                    <div style="white-space: pre-line">
+                        @item.Text
+                    </div>
+                </div>
+                <div class="col-sm-2 col-md-2 col-lg-2">
+                    @item.Date.ToShortTimeString()
+                </div>
+                currentUser = item.Sender.Id;
+            }
+            else
+            {
+                <div class="col-sm-2 col-md-1 col-lg-1">
+                </div>
+                <div class="col-sm-8 col-md-9 col-lg-9" style="white-space: pre-line; word-break: break-all;">
+                    @item.Text
+                </div>
+                <div class="col-sm-2 col-md-2 col-lg-2">
+                    @item.Date.ToShortTimeString()
+                </div>
+            }
+        </div>
+    }
+</div>
+

@@ -1,0 +1,79 @@
+﻿@using Microsoft.AspNet.Identity
+@using WebApplication.Services
+@model List<WebApplication.Models.ViewModels.PeopleViewModel>
+
+@{
+    PeopleService peopleService = new PeopleService();
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    a:hover[class = "forImage"] {
+        text-decoration: none;
+    }
+</style>
+
+<div id="MessageArea">
+
+</div>
+
+<div class="col-md-8 col-lg-8 col-sm-8">
+    <table class="table table-striped">
+
+        <tr>
+            <th>Пользователь</th>
+            <th>Действия</th>
+            <th>Город</th>
+            <th>Активность</th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            if (item.Id != ViewBag.userId)
+            {
+                <tr>
+                    <td>
+                       <a href="~/Account/UserPage/@item.Id">
+                            @{ ViewBag.userName = @item.Name; }
+                            @if (item.Name.Length > 9)
+                            {
+                                ViewBag.userName = item.Name.Remove(7);
+                                ViewBag.userName += "...";
+                            }
+                            @{ ViewBag.userSurName = @item.Surname; }
+                            @if (item.Surname.Length > 9)
+                            {
+                                ViewBag.userSurName = item.Surname.Remove(7);
+                                ViewBag.userSurName += "...";
+                            }
+                            <p>@ViewBag.userName&nbsp;@ViewBag.userSurName</p>
+                        </a>
+                        <a class="forImage" href="~/Account/UserPage/@item.Id">
+                            <img src='@Url.Content("~/Content/Images/AccountImages/" + item.Avatar)' alt="Picture" width="100" height="100" />
+                        </a>
+
+                        <br />
+                    </td>
+                    <td>
+                        @if(item.Id != User.Identity.GetUserId())
+                        { 
+                            @Html.Partial("FriendshipButtonStatus", item.Id)                        
+
+                            <button type="button" class="btn btn-primary" style="margin-top: 7px; width: 210px" onclick="return showMessageBox('@item.Id')">Отправить сообщение</button>
+                        }
+                        else
+                        {
+                            <a href="~/Account/UserPage/@item.Id"class="btn btn-primary" style="margin-top: 7px; width: 190px" onclick="">Это наш пользователь</a>
+                        }
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.City)
+                    </td>
+                    <td>
+                        @peopleService.GetDateOfActivity(@item.DateOfActivity.Value)
+                    </td>
+                </tr>
+            }
+        }
+    </table>
+</div>

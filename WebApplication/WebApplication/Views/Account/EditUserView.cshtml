@@ -1,0 +1,80 @@
+﻿@model SocialNetworkWithIdentity.Models.ApplicationUser
+@{
+    ViewBag.Title = "Редактирование";
+}
+
+<h2>Редактирование данных пользователя</h2>
+
+<link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<script type="text/javascript" src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+
+@using (Html.BeginForm("EditUser", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <hr />
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+    
+    @Html.HiddenFor(g => g.Id)
+    @Html.HiddenFor(g => g.Email);
+    @*---*@
+    <!--<div class="form-group">
+        @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.EditorFor(m => m.Email, new { @class = "form-control" })
+        </div>
+    </div>-->
+    <div class="form-group">
+        @Html.LabelFor(m => m.Name, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.EditorFor(m => m.Name, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Surname, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.EditorFor(m => m.Surname, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.DateOfBirth, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.EditorFor(m => m.DateOfBirth, new { @class = "form-control", id = "MyDate" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Avatar, new { @class = "col-md-2 control-label" })
+        <input type="file" name="uploadImage" />
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Gender, new { @class = "col-md-2 control-label" })
+        <div class="dropdownlist">
+            @Html.DropDownListFor(model => model.Gender, new List<SelectListItem>
+            {
+                new SelectListItem() {Text = "Male", Value = "Male"},
+                new SelectListItem() {Text = "Female", Value = "Female"},
+            })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.City, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.EditorFor(m => m.City, new { @class = "form-control" })
+        </div>
+    </div>
+    @*---*@
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" class="btn btn-default" value="Сохранить" />
+        </div>
+    </div>
+}
+
+<script>
+    $(function () {
+        $("#MyDate").datepicker();
+    });
+</script>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

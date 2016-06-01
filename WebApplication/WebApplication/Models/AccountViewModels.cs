@@ -83,12 +83,15 @@ namespace WebApplication.Models
 
         [Required]
         [Display(Name = "Пол")]
-        public string Gender { get; set; }
+        public bool Gender { get; set; }
 
         [Required]
         [Display(Name = "Дата рождения")]
         [DataType(DataType.Date), DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? Age { get; set; }
+
+        [Display(Name = "Аватар:")]
+        public string Avatar { set; get; }
 
         [Required]
         [Display(Name = "Имя")]

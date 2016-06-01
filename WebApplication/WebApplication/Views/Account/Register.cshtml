@@ -34,8 +34,8 @@
         <div class="col-md-10">
             @Html.DropDownListFor(m => m.Gender,
                   new List<SelectListItem> {
-                       new SelectListItem { Value = "0" , Text = "Мужской" },
-                       new SelectListItem { Value = "1" , Text = "Женский" }
+                       new SelectListItem { Value = "true" , Text = "Мужской" },
+                       new SelectListItem { Value = "false" , Text = "Женский" }
                     },
                   new { @class = "form-control" })
         </div>

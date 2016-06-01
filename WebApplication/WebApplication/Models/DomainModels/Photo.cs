@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace WebApplication.Models
+namespace WebApplication.Models.DomainModels
 {
     public class Photo
     {
@@ -21,5 +21,7 @@ namespace WebApplication.Models
 
         [Display(Name = "Created On")]
         public DateTime CreatedOn { get; set; }
+
+        //public ApplicationUser Sender { set; get; }
     }
 }

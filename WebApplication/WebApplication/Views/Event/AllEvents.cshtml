@@ -1,0 +1,80 @@
+﻿@using WebApplication.Models.DomainModels
+@model IOrderedEnumerable<WebApplication.Models.ViewModels.EventViewModel>
+
+<style>
+    .textInfo {
+        border-radius: 2px;
+        color: white;
+        padding: 3px;
+    }
+
+       .zbn {
+    /*border: 1px double #333; /* Рамка вокруг таблицы */ 
+    border-collapse: separate; /* Способ отображения границы */ 
+    width: 100%; /* Ширина таблицы */ 
+    border-spacing: 7px 11px; /* Расстояние между ячейками */ 
+   }
+</style>
+<table class="table zbn" style="border-spacing: 5px;">
+    <tr>
+        @*<th>
+            @Html.DisplayNameFor(model => model.Sender)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Text)
+        </th>*@
+        @*<th>
+            @Html.DisplayNameFor(model => model.Date)
+        </th>*@
+    </tr>
+
+    @foreach (var item in Model)
+    {
+            var EventCollectionFromTheMyNews = @item.Owners;
+
+        <tr>
+            <td>
+                @Html.Partial("SmallUserLink_1", item.Sender.Id)
+                @*<span style="background-color: #5B5757; color:#dbd7d7; display: block" class="textInfo">@item.Date</span>*@
+            </td>
+
+            <td style="">
+                @switch (item.EventType)
+                {
+                    case EventType.RecordOnTheWall:
+                        if (Request.Url.AbsolutePath == "/Event/AllEvents")
+                        {
+                            <div style="display: inline-table; background-color: #DBD7D7">
+                                <span style="background-color: cornflowerblue;" class="textInfo">На стене</span>
+                                @if (@item.Owners.Count > 1)
+                                {
+                                    <span style="background-color: cornflowerblue;" class="textInfo">у пользователя</span>
+                                    @Html.Partial("SmallUserLink_1", @item.Owners.FirstOrDefault(u => u.Id != @item.Sender.Id).Id)
+                                }
+                            </div>
+
+                        }
+                        break;
+                    case EventType.CancelOfferfriendship:
+                        <span style="background-color: indianred;" class="textInfo">Отмена заявки в друзья</span>
+                        break;
+                    case EventType.ConfirmFriendship:
+                        <span style="background-color: darkseagreen;" class="textInfo">Подтверждение дружбы</span>
+                        break;
+                    case EventType.OfferFriendship:
+                        <span style="background-color: darkseagreen;" class="textInfo">Предложение дружбы</span>
+                        break;
+                    case EventType.DeleteFriendship:
+                        <span style="background-color: indianred;" class="textInfo">Удаление дружбы</span>
+                        break;
+                    case EventType.DontConfirmOfferFriendship:
+                        <span style="background-color: indianred;" class="textInfo">Отклонение заявки в друзья</span>
+                        break;
+                }
+                <p style="background-color: #F5F0F0; margin: 5px; padding: 3px; border-radius: 3px">@item.Text</p>
+                <span style="background-color: #5B5757; color:#dbd7d7;" class="textInfo">@item.Date</span>
+            </td>
+        </tr>
+    }
+
+</table>

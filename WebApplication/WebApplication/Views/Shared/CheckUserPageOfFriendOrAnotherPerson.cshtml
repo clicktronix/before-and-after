@@ -1,0 +1,31 @@
+﻿@using Microsoft.AspNet.Identity
+@using SocialNetworkWithIdentity.Services
+
+@model string
+
+@{
+    PeopleService peopleService = new PeopleService();
+}
+
+<div id="userLink_@Model">
+    @if (peopleService.CheckIfUserIsMyFriend(User.Identity.GetUserId(), Model))
+    {
+        <a href="../Account/UserPageOfFriend?Id=@Model">
+            <p>@Html.DisplayFor(modelItem => peopleService.GetUser(Model).Name)&nbsp;@Html.DisplayFor(modelItem => peopleService.GetUser(Model).Surname)</p>
+        </a>
+        <a class="forImage" href="../Account/UserPageOfFriend?Id=@Model">
+            <img src='@Url.Content("~/Content/Images/AccountImages/" + peopleService.GetUser(Model).Avatar)' alt="Picture" width="100" height="100" />
+        </a>
+    }
+    else
+    {
+        @*@Html.ActionLink(@Html.DisplayFor(modelItem => peopleService.GetUser(Model).Name) + " " + @Html.DisplayFor(modelItem => peopleService.GetUser(Model).Surname),
+                                         "UserPageOfAnotherPerson", "Account", new { Id = Model }, null)*@
+        <a href="../Account/UserPageOfAnotherPerson?Id=@Model">
+            <p>@Html.DisplayFor(modelItem => peopleService.GetUser(Model).Name)&nbsp;@Html.DisplayFor(modelItem => peopleService.GetUser(Model).Surname)</p>
+        </a>
+        <a class="forImage" href="../Account/UserPageOfAnotherPerson?Id=@Model">
+            <img src='@Url.Content("~/Content/Images/AccountImages/" + peopleService.GetUser(Model).Avatar)' alt="Picture" width="100" height="100" />
+        </a>
+    }
+</div>
