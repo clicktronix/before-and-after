@@ -2,143 +2,68 @@
 @using WebApplication.Services
 @model WebApplication.Models.IndexViewModel
 @{
-    ViewBag.Title = "Управление";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>@ViewBag.Title.</h2>
-
 <p class="text-success">@ViewBag.StatusMessage</p>
 <div>
-    <h4>Изменение параметров учетной записи</h4>
-    <hr/>
-    <dl class="dl-horizontal">
-        <dt>Пароль:</dt>
-        <dd>
-            [@if (Model.HasPassword)
-            {
-                @Html.ActionLink("Смена пароля", "ChangePassword")
-            }
-            else
-            {
-                @Html.ActionLink("Создать", "SetPassword")
-            }]
-        </dd>
-        <dt>Профиль:</dt>
-        <dd>
-            [@Html.ActionLink("Управление", "Edit", "Manage", FormMethod.Post, new {@class = "modal-link"})]
-        </dd>
-
-
-
-        @*  
-            <dt>Номер телефона:</dt>
-            <dd>
-                @(Model.PhoneNumber ?? "None")
-                @if (Model.PhoneNumber != null)
-                {
-                    <br />
-                    <text>[&nbsp;&nbsp;@Html.ActionLink("Change", "AddPhoneNumber")&nbsp;&nbsp;]</text>
-                    using (Html.BeginForm("RemovePhoneNumber", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-                    {
-                        @Html.AntiForgeryToken()
-                        <text>[<input type="submit" value="Remove" class="btn-link" />]</text>
-                    }
-                }
-                else
-                {
-                    <text>[&nbsp;&nbsp;@Html.ActionLink("Add", "AddPhoneNumber")
-                }
-            </dd>
-        *@
-        @*<dt>Двухфакторная проверка подлинности:</dt>
-        <dd>
-            <p>
-                Поставщики двухфакторной проверки подлинности не настроены. В <a href="http://go.microsoft.com/fwlink/?LinkId=403804">этой статье</a>
-                вы можете узнать, как настроить двухфакторную проверку подлинности в этом приложении ASP.NET.
-            </p>
-            @if (Model.TwoFactor)
-                {
-                    using (Html.BeginForm("DisableTwoFactorAuthentication", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-                    {
-                        @Html.AntiForgeryToken()
-                        <text>Включено
-                        <input type="submit" value="Отключить" class="btn btn-link" />
-                        </text>
-                    }
-                }
-                else
-                {
-                    using (Html.BeginForm("EnableTwoFactorAuthentication", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-                    {
-                        @Html.AntiForgeryToken()
-                        <text>Отключено
-                        <input type="submit" value="Включить" class="btn btn-link" />
-                        </text>
-                    }
-                }
-        </dd>*@
-
-
-
-    </dl>
-</div>
-
-
 @{
-        PeopleService peopleService = new PeopleService();
-
-        if (User != null)
-        {
-            ViewBag.CountOffersFriendships = peopleService.GetCountOffersFriendships(User.Identity.GetUserId());
-            peopleService.SetDateOfActivity(User.Identity.GetUserId());
-        }
+    PeopleService peopleService = new PeopleService();
+    if (User != null)
+    {
+        ViewBag.CountOffersFriendships = peopleService.GetCountOffersFriendships(User.Identity.GetUserId());
+        peopleService.SetDateOfActivity(User.Identity.GetUserId());
+    }
 }
 
-
-<body>
-<div class="visible-xs">
-    <a href="/Account/UserPage">
-        Моя&nbsp;страница
-    </a>
-</div>
-<div class="visible-xs">
-    <a href="/People/ShowFriendsOrOffers">
-        Друзья
-        @if (ViewBag.CountOffersFriendships > 0)
-        {
-            <span class="badge span_friends">@ViewBag.CountOffersFriendships</span>
-        }
-    </a>
-</div>
-<div class="visible-xs">@Html.ActionLink("Новости", "AllEvents", "Event")</div>
-<div class="visible-xs"><hr style="border-color: black; margin-top: -1px;"/></div>
-<div>@Html.ActionLink("Пользователи", "ShowUsers", "People", null, new {@class = "headMenu"})</div>
-<div class="container">
-        <br />
-    <div class="container-fluid">
-        <!--Боковая панель меню-->
-        <div class="row-fluid row">
-            <div class="col-lg-2 col-md-2 hidden-xs col-sm-1" style="font-weight: bold">
-                <ul class=" nav nav-list menu">
-                    <li>
-                        <a href="/Manage/UserPage">
-                            Моя&nbsp;страница
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/People/ShowFriendsOrOffers">
-                            Друзья
-                            @if (ViewBag.CountOffersFriendships > 0)
-                            {
-                                <span class="badge span_friends">@ViewBag.CountOffersFriendships</span>
-                            }
-                        </a>
-                    </li>
-                    <li>@Html.ActionLink("Новости", "AllEvents", "Event")</li>
-                </ul>
+    <div>
+        <div class="visible-xs">
+            <a href="/Account/UserPage">
+                Мой&nbsp;профиль
+            </a>
+        </div>
+        <div class="visible-xs">
+            <a href="/People/ShowFriendsOrOffers">
+                Друзья
+                @if (ViewBag.CountOffersFriendships > 0)
+                {
+                    <span class="badge span_friends">@ViewBag.CountOffersFriendships</span>
+                }
+            </a>
+        </div>
+        <div class="visible-xs">@Html.ActionLink("Новости", "AllEvents", "Event")</div>
+        <div class="visible-xs"><hr style="border-color: black; margin-top: -1px;"/>
+        </div>
+        @*<div>@Html.ActionLink("Пользователи", "ShowUsers", "People", null, new {@class = "headMenu"})</div>*@
+        <div class="container form-horizontal">
+            <br/>
+            <div class="container-fluid">
+                <!--Боковая панель меню-->
+                <div class="row-fluid row">
+                    <div class="col-lg-2 col-md-2 hidden-xs col-sm-1" style="font-weight: bold">
+                        <ul class=" nav nav-list menu">
+                            <li>
+                                <a href="/Manage/UserPage">
+                                    Мой&nbsp;профиль
+                                </a>
+                            </li>
+                            <li>@Html.ActionLink("Редактировать", "Edit", "Manage", FormMethod.Post, new {@class = "modal-link"})</li>
+                            <li>
+                                <a href="/People/ShowFriendsOrOffers">
+                                    Друзья
+                                    @if (ViewBag.CountOffersFriendships > 0)
+                                    {
+                                        <span class="badge span_friends">@ViewBag.CountOffersFriendships</span>
+                                    }
+                                </a>
+                            </li>
+                            <li>@Html.ActionLink("Смена пароля", "ChangePassword")</li>
+                            <li>@Html.ActionLink("Новости", "AllEvents", "Event")</li>
+                            <li>@Html.ActionLink("Пользователи", "ShowUsers", "People")</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
-</body>

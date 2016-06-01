@@ -1,5 +1,4 @@
-﻿@using System.Web.Razor.Parser.SyntaxTree
-@model WebApplication.Models.PagedList<WebApplication.Models.DomainModels.Photo>
+﻿@model WebApplication.Models.PagedList<WebApplication.Models.DomainModels.Photo>
 
 @{
     ViewBag.Title = "Галлерея";
@@ -18,7 +17,7 @@
                        value="@ViewBag.filter"
                        class="form-control"
                        style="display: inline"
-                       placeholder="Описание изображения"/>
+                       placeholder="Описание изображения" />
                 <span class="input-group-btn">
                     <button class="btn btn-default" type="submit">Поиск</button>
                 </span>
@@ -26,7 +25,7 @@
         </div>
         <div class="col-sm-4">
             <a>
-                @Html.ActionLink(" ", "Create", "Home", FormMethod.Post, new {@class = "modal-link btn btn-success glyphicon glyphicon-plus"})
+                @Html.ActionLink(" ","Create", "Home", FormMethod.Post, new {@class = "modal-link btn btn-success glyphicon glyphicon-plus"})
             </a>
         </div>
     </div>
@@ -67,16 +66,22 @@
         </div>
     </div>
 
-    <div style="margin-top: 17px;">
-        <div id="links">
-            @if (Model != null)
+    @:<div style="margin-top: 17px;">
+    <div id="links">
+        @{
+            if (Model != null)
             {
                 foreach (var item in Model.Content)
                 {
                     <a href="@item.ImagePath" title="@item.Description" data-gallery>
-                        <img src="@item.ThumbPath" alt="@item.Description" class="img-rounded" style="margin-bottom: 7px;"/>
+                        <img src="@item.ThumbPath" alt="@item.Description" class="img-rounded" style="margin-bottom:7px;" />
                     </a>
                 }
+                @:</div>
+                @:</div>
+
+                @:<div>
+        
                 var grid = new WebGrid(
                     canPage: true,
                     rowsPerPage: Model.PageSize,
@@ -86,11 +91,11 @@
                 grid.Bind(Model.Content, rowCount: Model.TotalRecords, autoSortAndPage: false);
                 grid.Pager(WebGridPagerModes.All);
 
-                grid.GetHtml(htmlAttributes: new {id = "grid"},
+                @grid.GetHtml(htmlAttributes: new { id = "grid" },
                     fillEmptyRows: false,
                     mode: WebGridPagerModes.All,
-                    columns: grid.Columns());
+                    columns: grid.Columns())
             }
-        </div>
+        } 
     </div>
 }

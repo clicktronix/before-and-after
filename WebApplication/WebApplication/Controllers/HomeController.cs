@@ -20,7 +20,7 @@ namespace WebApplication.Controllers
             return View();
         }
 
-        [Authorize]
+        //[Authorize]
         public ActionResult Gallery(string filter = null, int page = 1, int pageSize = 20)
         {
             var records = new PagedList<Photo>();
@@ -46,7 +46,7 @@ namespace WebApplication.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        //[Authorize]
         public ActionResult Create()
         {
             var photo = new Photo();
@@ -54,7 +54,7 @@ namespace WebApplication.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        //[Authorize]
         public ActionResult Create(Photo photo, IEnumerable<HttpPostedFileBase> files)
         {
             ImageConfig save = new ImageConfig();
