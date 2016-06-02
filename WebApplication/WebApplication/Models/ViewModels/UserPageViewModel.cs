@@ -21,7 +21,7 @@ namespace WebApplication.Models.ViewModels
         [Display(Name = "Дата рождения:")]
         [DataType(DataType.Date)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd}")]
-        public DateTime DateOfBirth { set; get; }
+        public DateTime Age { set; get; }
 
         [Display(Name = "Аватар:")]
         public string Avatar { set; get; }

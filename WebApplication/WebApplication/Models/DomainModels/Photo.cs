@@ -21,6 +21,6 @@ namespace WebApplication.Models.DomainModels
         [Display(Name = "Created On")]
         public DateTime CreatedOn { get; set; }
 
-        //public ApplicationUser Sender { set; get; }
+        public ApplicationUser Sender { set; get; }
     }
 }

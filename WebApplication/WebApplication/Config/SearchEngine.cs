@@ -57,9 +57,11 @@ namespace WebApplication.Config
             {
                 var rank = 0;
 
-                if (!string.IsNullOrWhiteSpace(entry.Email))
+                if (!string.IsNullOrWhiteSpace(entry.Email) || !string.IsNullOrWhiteSpace(entry.Name) || !string.IsNullOrWhiteSpace(entry.Surname))
                 {
                     rank += Regex.Matches(entry.Email.ToLowerInvariant(), regex).Count;
+                    rank += Regex.Matches(entry.Name.ToLowerInvariant(), regex).Count;
+                    rank += Regex.Matches(entry.Surname.ToLowerInvariant(), regex).Count;
                 }
                 if (rank > 0)
                 {

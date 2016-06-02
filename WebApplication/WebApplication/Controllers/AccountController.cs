@@ -199,7 +199,6 @@ namespace WebApplication.Controllers
                     Country = model.Country,
                     City = model.City,
                     Age = model.Age,
-                    Avatar = model.Avatar,
                     PhoneNumber = model.PhoneNumber
                 };
 

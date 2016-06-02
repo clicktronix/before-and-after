@@ -30,6 +30,24 @@
         }
         foreach (var item in Model)
         {
+            <a href="~/Manage/UserPage/@item.Id">
+                @{ ViewBag.userName = @item.Name; }
+                @if (item.Name.Length > 9)
+                {
+                ViewBag.userName = item.Name.Remove(7);
+                ViewBag.userName += "...";
+                }
+                @{ ViewBag.userSurName = @item.Surname; }
+                @if (item.Surname.Length > 9)
+                {
+                ViewBag.userSurName = item.Surname.Remove(7);
+                ViewBag.userSurName += "...";
+                }
+                <p>@ViewBag.userName&nbsp;@ViewBag.userSurName</p>
+            </a>
+            <a class="forImage" href="~/Manage/UserPage/@item.Id">
+                <img src='@Url.Content("~/Content/Images/AccountImages/" + item.Avatar)' alt="Picture" width="100" height="100"/>
+            </a>
             @Html.DisplayFor(model => item.UserName)
         }
     }

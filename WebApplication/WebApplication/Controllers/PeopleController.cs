@@ -49,9 +49,6 @@ namespace WebApplication.Controllers
             // получить себя
             var currentUser = _peopleService.GetUser(User.Identity.GetUserId());
 
-            //users = _peopleService.GetUsers();
-
-            //Маппим коллекцию ApplicationUser - ов в коллекцию PeopleViewModel - ов
             List<PeopleViewModel> viewUsers = Mapper.Map<IEnumerable<ApplicationUser>, List<PeopleViewModel>>(users);
 
             foreach (var user in viewUsers)

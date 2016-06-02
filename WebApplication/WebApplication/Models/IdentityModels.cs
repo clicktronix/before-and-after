@@ -123,9 +123,9 @@ namespace WebApplication.Models
             modelBuilder.Entity<Event>()
                 .HasRequired(e => e.Sender);
 
-            //modelBuilder.Entity<Photo>().
-            //    HasRequired(p => p.Sender).
-            //    WithMany(u => u.Photos);
+            modelBuilder.Entity<Photo>().
+                HasRequired(p => p.Sender).
+                WithMany(u => u.Photos);
         }
     }
 }

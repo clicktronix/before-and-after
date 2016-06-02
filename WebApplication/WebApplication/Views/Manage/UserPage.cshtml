@@ -94,6 +94,11 @@
         <br/>
     </div>
 
+    <div>
+        @Html.ActionLink("Галерея", "Gallery", "Home", null, new {@class = "btn btn-success", @style = "height: 45px; width: 200px; margin-top: 15px", Id = Model.Id})
+        <br/>
+    </div>
+
     <div style="height: 200px; width: 200px; margin-bottom: 15px; margin-top: 15px">
         <a class="forImage" href="~/People/FriendshipList/@Model.Id">
             <div class="btn btn-success" style="margin: 0; width: 200px">
@@ -208,8 +213,8 @@
     <div>
         <table class="table-condensed">
             <tr>
-                <td>@Html.DisplayNameFor(modelItem => Model.DateOfBirth)</td>
-                <td class="col-md-7">@Model.DateOfBirth.ToString("D")</td>
+                <td>@Html.DisplayNameFor(modelItem => Model.Age)</td>
+                <td class="col-md-7">@Model.Age.ToString("D")</td>
             </tr>
             <tr>
                 <td>@Html.DisplayNameFor(modelItem => Model.Country)</td>

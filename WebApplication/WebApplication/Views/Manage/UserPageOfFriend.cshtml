@@ -32,10 +32,10 @@
             <img src='@Url.Content("~/Content/Images/AccountImages/" + Model.Avatar)' alt="Avatar" width="250" height="250" />
         </div>
         @Html.Partial("FriendshipButtonStatus", Model.Id)
-        <button type="button" class="btn btn-primary" style="width: 210px; margin: 7px 0 ;" onclick="return showMessageBox('@Model.Id')">Отправить сообщение</button>
-
-        <br />
-        <br />
+        <div>
+            @Html.ActionLink("Галерея", "Gallery", "Home", null, new {@class = "btn btn-success", @style = "height: 45px; width: 200px; margin-top: 15px", Id = Model.Id})
+            <br />
+        </div>
 
         <div style="height: 200px; width: 220px; margin-bottom: 45px">
             <a class="forImage" href="~/People/CommonFriendshipList/@Model.Id">
@@ -74,8 +74,6 @@
                     {<span class="badge span_friends">@ViewBag.CountOfFriends</span>}
                 </h3>
             </a>
-
-
 
             <br />
 
@@ -159,8 +157,8 @@
         <div>
             <table class="table-condensed">
                 <tr>
-                    <td>@Html.DisplayNameFor(modelItem => Model.DateOfBirth)</td>
-                    <td class="col-md-7">@Model.DateOfBirth.ToString("D")</td>
+                    <td>@Html.DisplayNameFor(modelItem => Model.Age)</td>
+                    <td class="col-md-7">@Model.Age.ToString("D")</td>
                 </tr>
                 <tr>
                     <td>@Html.DisplayNameFor(modelItem => Model.City)</td>
