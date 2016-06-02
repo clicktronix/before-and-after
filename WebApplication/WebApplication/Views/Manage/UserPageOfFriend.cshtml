@@ -160,19 +160,15 @@
             <table class="table-condensed">
                 <tr>
                     <td>@Html.DisplayNameFor(modelItem => Model.DateOfBirth)</td>
-                    <td>@Model.DateOfBirth.ToString("D")</td>
+                    <td class="col-md-7">@Model.DateOfBirth.ToString("D")</td>
                 </tr>
                 <tr>
                     <td>@Html.DisplayNameFor(modelItem => Model.City)</td>
-                    <td>@Html.DisplayFor(modelItem => Model.City)</td>
+                    <td class="col-md-7">@Html.DisplayFor(modelItem => Model.City)</td>
                 </tr>
-            </table>
-        </div>
-
-        <div>
-            <table>
                 <tr>
-                    <td><h3 style="float: left">Контактная информация</h3></td>
+                    <td>@Html.DisplayNameFor(modelItem => Model.Country)</td>
+                    <td class="col-md-7">@Html.DisplayFor(modelItem => Model.Country)</td>
                 </tr>
             </table>
         </div>
@@ -181,7 +177,11 @@
             <table class="table-condensed">
                 <tr>
                     <td>@Html.DisplayNameFor(modelItem => Model.Email)</td>
-                    <td>@Html.DisplayFor(modelItem => Model.Email)</td>
+                    <td class="col-md-7">@Html.DisplayFor(modelItem => Model.Email)</td>
+                </tr>
+                <tr>
+                    <td>@Html.DisplayNameFor(modelItem => Model.PhoneNumber)</td>
+                    <td class="col-md-7">@Html.DisplayFor(modelItem => Model.PhoneNumber)</td>
                 </tr>
             </table>
         </div>
@@ -189,7 +189,7 @@
         <hr style="width: 545px" />
 
         <a id="WallLink" style="color: lightslategray;">
-            <span>Написать на стене</span>
+            <span>Заметки</span>
         </a>
 
         <script>

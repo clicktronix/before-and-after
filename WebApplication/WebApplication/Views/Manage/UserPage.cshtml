@@ -6,12 +6,15 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/scripts")
+@Scripts.Render("~/scripts/jquery.unobtrusive-ajax.js")
+
 <style>
     a:hover[class = "forImage"] {
         text-decoration: none;
     }
     .paragraph {
-        padding-top: 50px;
         margin-bottom: -3px;
         font-size: 10px
     }
@@ -19,20 +22,17 @@
 
 <body>
     <div class="col-md-offset-2">
-        <div class="col-xs-5 col-sm-6 col-md-5 col-lg-4">
+        <div class="col-xs-4 col-sm-5 col-md-4 col-lg-3">
             <div>
                 <img style="width: 200px; padding-top: 50px" src='@Url.Content("~/Content/Images/AccountImages/" + Model.Avatar)' alt="Avatar" />
             </div>
 
             <div>
-                @Html.ActionLink("Изменить фотографию", "ChangePhoto", "Manage", null, new {@class = "btn btn-success", @style = "height: 45px; width: 200px; margin-top: 5px", Id = Model.Id})
+                @Html.ActionLink("Изменить фотографию", "ChangePhoto", "Manage", null, new {@class = "btn btn-success", @style = "height: 45px; width: 200px; margin-top: 15px", Id = Model.Id})
                 <br />
             </div>
 
-            <br />
-            <br />
-
-            <div style="height: 200px; width: 200px; margin-bottom: 45px">
+            <div style="height: 200px; width: 200px; margin-bottom: 15px; margin-top: 15px">
                 <a class="forImage" href="~/People/FriendshipList/@Model.Id">
                     <div class="btn btn-success" style="margin: 0; width: 200px">
                         Друзья
@@ -95,7 +95,7 @@
             </div>
         </div>
 
-        <div class="col-xs-7 col-xs-offset-1 col-sm-6 col-sm-offset-0 col-md-7 col-md-offset-0 col-lg-8 col-lg-offset-0" style="padding-right: 115px">
+        <div class="col-xs-7 col-xs-offset-1 col-sm-6 col-sm-offset-0 col-md-7 col-md-offset-0 col-lg-8 col-lg-offset-0" style="padding-right: 0px">
             <div>
                 <h3 style="display: inline-block; padding-top: 50px">
                     <p>@Html.DisplayFor(modelItem => Model.Name)&nbsp;@Html.DisplayFor(modelItem => Model.Surname)</p>
@@ -113,7 +113,7 @@
                         }
                         else
                         {
-                            <span>Изменить статус</span>
+                            <span>Ссылка на страницу ВК</span>
                         }
                     </a>
                 </div>
@@ -150,6 +150,10 @@
                         <td class="col-md-7" >@Model.DateOfBirth.ToString("D")</td>
                     </tr>
                     <tr>
+                        <td>@Html.DisplayNameFor(modelItem => Model.Country)</td>
+                        <td class="col-md-7">@Html.DisplayFor(modelItem => Model.Country)</td>
+                    </tr>
+                    <tr>
                         <td>@Html.DisplayNameFor(modelItem => Model.City)</td>
                         <td class="col-md-7">@Html.DisplayFor(modelItem => Model.City)</td>
                     </tr>
@@ -164,7 +168,7 @@
                     </tr>
                     <tr>
                         <td>@Html.DisplayNameFor(modelItem => Model.PhoneNumber)</td>
-                        <td class="col-md-7">@Html.DisplayFor(modelItem => Model.PhoneNumber)</tdclass="col-md-7>
+                        <td class="col-md-7">@Html.DisplayFor(modelItem => Model.PhoneNumber)</td>
                     </tr>
                 </table>
             </div>
@@ -172,7 +176,7 @@
             <hr style="width: 545px" />
 
             <a id="WallLink" style="color: lightslategray; cursor: pointer;">
-                <span>Написать на стене</span>
+                <span>Создать заметку</span>
             </a>
 
             <script>
@@ -186,8 +190,6 @@
 
         function ShowAnimation() {
             $("#ShowWelcome").show(1);
-            //$("#ShowWelcome").fadeIn(1);
-            //$("#ShowWelcome").hide(5000);
             $("#ShowWelcome").fadeOut(3000);
         }
 
@@ -224,7 +226,7 @@
             </div>
             <hr />
             <p>
-                <h4>Стена</h4>
+                <h4>Заметки</h4>
             </p>
             <div id="WallLoading" style="display: none; width: 50%; height: 50%;">
                 <img src='../Content/images/giff/ajax-loader-1.gif' class="table zbn" />

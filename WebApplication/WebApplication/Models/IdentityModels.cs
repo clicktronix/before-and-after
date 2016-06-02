@@ -33,8 +33,9 @@ namespace WebApplication.Models
         public string Avatar { set; get; }
 
         public string Status { set; get; }
-
+        
         public DateTime? DateOfActivity { set; get; }
+
 
         public virtual ICollection<Photo> Photos { get; set; }
 

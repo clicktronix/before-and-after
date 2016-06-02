@@ -26,6 +26,9 @@ namespace WebApplication.Models.ViewModels
         [Display(Name = "Аватар:")]
         public string Avatar { set; get; }
 
+        [Display(Name = "Страна:")]
+        public string Country { set; get; }
+
         [Display(Name = "Город:")]
         public string City { set; get; }
 

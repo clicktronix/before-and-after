@@ -12,43 +12,4 @@
     <div id="userList">
         @Html.Partial("UsersList", Model)
     </div>
-        @*<div style="background-color: silver;" class="col-md-2 navbar-right navbar-form navbar-static-top">
-            @using (Ajax.BeginForm("GetUsersList", "People", null, new AjaxOptions { UpdateTargetId = "userList" }))
-            {
-                <h3 style="text-align:center">Поиск</h3>
-
-                @Html.CheckBox("commonFriends", false, new { style = "display: none;" })
-                
-                @Html.Label("Имя:")
-                <br />
-                @Html.TextBox("name")
-                <br />
-                @Html.Label("Фамилия:")
-                <br />
-                @Html.TextBox("surname")
-                <hr />
-                
-                <h4>Пол:</h4>
-
-                <div class="radio">
-                    <label>@Html.RadioButton("gender", "All", true, new { id = "radioAll" }) Все</label>
-                    <br />
-                    <label>@Html.RadioButton("gender", "Male", false, new { id = "radioMale" }) Мужской</label>
-                    <br />
-                    <label>@Html.RadioButton("gender", "Female", false, new { id = "radioFemale" }) Женский</label>
-                </div>
-                            
-                <br />
-                <hr />
-                            
-                <div class="checkbox">
-                    <label>@Html.CheckBox("online", false) Онлайн</label>
-                </div>
-
-                <hr />
-                <div>
-                    <input class="btn btn-primary" type="submit" value="Найти" />
-                </div>
-            }
-    </div>*@
 </div>

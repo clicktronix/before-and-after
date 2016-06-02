@@ -87,11 +87,9 @@ namespace WebApplication.Models
 
         [Required]
         [Display(Name = "Дата рождения")]
-        [DataType(DataType.Date), DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        [DataType(DataType.Date)]
+        //[DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? Age { get; set; }
-
-        [Display(Name = "Аватар:")]
-        public string Avatar { set; get; }
 
         [Required]
         [Display(Name = "Имя")]
@@ -108,6 +106,13 @@ namespace WebApplication.Models
         [Required]
         [Display(Name = "Город")]
         public string City { get; set; }
+
+        [Display(Name = "Аватар:")]
+        public string Avatar { set; get; }
+
+        [RegularExpression("[0-9]*", ErrorMessage = "Поле Телефон может содержать только цифры")]
+        [Display(Name = "Телефон:")]
+        public string PhoneNumber { set; get; }
     }
 
     public class ResetPasswordViewModel

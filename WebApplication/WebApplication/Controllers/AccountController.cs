@@ -199,7 +199,8 @@ namespace WebApplication.Controllers
                     Country = model.Country,
                     City = model.City,
                     Age = model.Age,
-                    Avatar = model.Avatar
+                    Avatar = model.Avatar,
+                    PhoneNumber = model.PhoneNumber
                 };
 
                 var result = await UserManager.CreateAsync(user, model.Password);

@@ -396,12 +396,7 @@
     <Content Include="Service References\Application Insights\ConnectedService.json" />
     <Content Include="Views\Account\DisplayEmail.cshtml" />
     <Content Include="Views\Account\ChangePhoto.cshtml" />
-    <Content Include="Views\Account\EditUser.cshtml" />
-    <Content Include="Views\Account\EditUserView.cshtml" />
     <Content Include="Views\Account\GetStatus.cshtml" />
-    <Content Include="Views\Account\UserPage.cshtml" />
-    <Content Include="Views\Account\UserPageOfAnotherPerson.cshtml" />
-    <Content Include="Views\Account\UserPageOfFriend.cshtml" />
     <None Include="Views\Event\AllEvents.cshtml" />
     <None Include="Views\Home\Create.cshtml" />
     <Content Include="Views\Shared\_Search.cshtml" />
