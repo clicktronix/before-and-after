@@ -28,6 +28,10 @@ namespace WebApplication.Models.ViewModels
         public string Avatar { set; get; }
 
         [Required]
+        [Display(Name = "Страна:")]
+        public string Country { set; get; }
+
+        [Required]
         [Display(Name = "Город:")]
         public string City { set; get; }
 

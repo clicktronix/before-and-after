@@ -1,4 +1,5 @@
-﻿@using WebApplication.Services
+﻿@using Microsoft.AspNet.Identity
+@using WebApplication.Services
 @model WebApplication.Models.ViewModels.UserPageViewModel
 
 @{
@@ -15,50 +16,119 @@
     a:hover[class="forImage"] {
         text-decoration: none;
     }
+    .paragraph {
+        margin-bottom: -3px;
+        font-size: 10px
+    }
 </style>
 
-    <div class="container col-lg-9 col-lg-offset-2" style="background-color: lightgray">
-        <div class="col-xs-4 col-sm-5 col-md-4 col-lg-3">
-            <div>
-                <img style="width: 200px; padding-top: 50px" src='@Url.Content("~/Content/Images/AccountImages/" + Model.Avatar)' alt="Avatar" />
-            </div>
-            <div style= "margin-bottom: 15px; margin-left: 275px; margin-top: 35px">@Html.Partial("FriendshipButtonStatus", Model.Id)</div>
+<div class="row">
+    @{
+        if (User != null)
+        {
+            ViewBag.CountOffersFriendships = peopleService.GetCountOffersFriendships(User.Identity.GetUserId());
+            peopleService.SetDateOfActivity(User.Identity.GetUserId());
+        }
+    }
 
-            @*<button type="button" class="btn btn-primary" style="width: 200px; margin: 7px 0 ;" 
-onclick="return showMessageBox('@Model.Id')">Отправить сообщение</button>*@
+    <div class="col-lg-2">
+        <div class="visible-xs">
+            <a href="/Account/UserPage">
+                Мой&nbsp;профиль
+            </a>
+        </div>
+        <div class="visible-xs">
+            <a href="/People/ShowFriendsOrOffers">
+                Друзья
+                @if (ViewBag.CountOffersFriendships > 0)
+                {
+                <span class="badge span_friends">@ViewBag.CountOffersFriendships</span>
+                }
+            </a>
+        </div>
+        <div class="visible-xs">@Html.ActionLink("Новости", "AllEvents", "Event")</div>
+        <div class="visible-xs">
+            <hr style="border-color: black; margin-top: -1px;" />
+        </div>
+        @*<div>@Html.ActionLink("Пользователи", "ShowUsers", "People", null, new {@class = "headMenu"})</div>*@
+        <div class="container form-horizontal">
+            <br />
+            <div class="container-fluid">
+                <!--Боковая панель меню-->
+                <div class="row-fluid row">
+                    <div class="col-lg-2 col-md-2 hidden-xs col-sm-1" style="font-weight: bold">
+                        <ul class="nav nav-list menu">
+                            <li>
+                                <a href="/Manage/UserPage">
+                                    Мой&nbsp;профиль
+                                </a>
+                            </li>
+                            <li>@Html.ActionLink("Редактировать", "Edit", "Manage", FormMethod.Post, new {@class = "modal-link"})</li>
+                            <li>
+                                <a href="/People/ShowFriendsOrOffers">
+                                    Друзья
+                                    @if (ViewBag.CountOffersFriendships > 0)
+                                    {
+                                    <span class="badge span_friends">@ViewBag.CountOffersFriendships</span>
+                                    }
+                                </a>
+                            </li>
+                            <li>@Html.ActionLink("Смена пароля", "ChangePassword", "Manage", FormMethod.Post, new {@class = "modal-link"})</li>
+                            <li>@Html.ActionLink("Новости", "AllEvents", "Event")</li>
+                            <li>@Html.ActionLink("Пользователи", "ShowUsers", "People")</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-        </div>
-        <div class="col-xs-7 col-xs-offset-1 col-sm-5 col-sm-offset-0 col-md-7 col-md-offset-0 col-lg-8 col-lg-offset-0">
-            <div style="padding-top: 50px">
-                <p>
-                    <h3>@Html.DisplayFor(modelItem => Model.Name)&nbsp;@Html.DisplayFor(modelItem => Model.Surname)</h3>
-                    <br/>
-                    @if ((DateTime.Now - Model.DateOfActivity).Value.TotalMinutes < 3)
-                    {
-                        <span style="color: mediumseagreen;">Онлайн</span>
-                    }
-                    else
-                    {
-                        <span style="color: red;">Последняя активность @peopleService.GetDateOfActivity(Model.DateOfActivity.Value)</span>
-                    }
-                </p>
+    <div class="col-md-offset-2">
+                <div class="col-xs-4 col-sm-5 col-md-4 col-lg-3">
+                    <div>
+                        <img style="width: 200px; padding-top: 25px" src='@Url.Content("~/Content/Images/AccountImages/" + Model.Avatar)' alt="Avatar"/>
+                    </div>
+                    <div style="margin-left: -15px; margin-top: 15px">@Html.Partial("FriendshipButtonStatus", Model.Id)</div>
+
+                    @*<button type="button" class="btn btn-primary" style="width: 200px; margin: 7px 0 ;"
+                              onclick="return showMessageBox('@Model.Id')">
+                        Отправить сообщение
+                    </button>*@
+
+                </div>
+
+                <div class="col-xs-7 col-xs-offset-1 col-sm-5 col-sm-offset-0 col-md-7 col-md-offset-0 col-lg-8 col-lg-offset-0">
+                    <div style="padding-top: 50px">
+                        <p>
+                            <h3>@Html.DisplayFor(modelItem => Model.Name)&nbsp;@Html.DisplayFor(modelItem => Model.Surname)</h3>
+                            <br/>
+                            @if ((DateTime.Now - Model.DateOfActivity).Value.TotalMinutes < 3)
+                            {
+                                <span style="color: mediumseagreen;">Онлайн</span>
+                            }
+                            else
+                            {
+                                <span style="color: red;">Последняя активность @peopleService.GetDateOfActivity(Model.DateOfActivity.Value)</span>
+                            }
+                        </p>
+                    </div>
+                    <hr style="width: 450px"/>
+                    <div>
+                        <table class="table-condensed">
+                            <tr>
+                                <td>@Html.DisplayNameFor(modelItem => Model.DateOfBirth)</td>
+                                <td>@Model.DateOfBirth.ToString("D")</td>
+                            </tr>
+                            <tr>
+                                <td>@Html.DisplayNameFor(modelItem => Model.Country)</td>
+                                <td>@Html.DisplayFor(modelItem => Model.Country)</td>
+                            </tr>
+                            <tr>
+                                <td>@Html.DisplayNameFor(modelItem => Model.City)</td>
+                                <td>@Html.DisplayFor(modelItem => Model.City)</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
             </div>
-            <hr style="width: 550px"/>
-            <div>
-                <table class="table-condensed">
-                    <tr>
-                        <td>@Html.DisplayNameFor(modelItem => Model.DateOfBirth)</td>
-                        <td>@Model.DateOfBirth.ToString("D")</td>
-                    </tr>
-                    <tr>
-                        <td>@Html.DisplayNameFor(modelItem => Model.Country)</td>
-                        <td>@Html.DisplayFor(modelItem => Model.Country)</td>
-                    </tr>
-                    <tr>
-                        <td>@Html.DisplayNameFor(modelItem => Model.City)</td>
-                        <td>@Html.DisplayFor(modelItem => Model.City)</td>
-                    </tr>
-                </table>
-            </div>
         </div>
-</div>

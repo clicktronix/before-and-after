@@ -51,16 +51,6 @@ namespace WebApplication
 
             Mapper.CreateMap<ApplicationUser, PeopleViewModel>();
             Mapper.CreateMap<PeopleViewModel, ApplicationUser>();
-            Mapper.CreateMap<RegisterViewModel, ApplicationUser>()
-                .ForMember("Gender", opt => opt.MapFrom(u => (u.Gender == true) ? "Мужской" : "Женский"))
-                .ForMember("UserName", opt => opt.MapFrom(u => u.Email))
-                .ForMember("Email", opt => opt.MapFrom(u => u.Email))
-                .ForMember("Name", opt => opt.MapFrom(u => u.Name))
-                .ForMember("Surname", opt => opt.MapFrom(u => u.Surname))
-                .ForMember("Country", opt => opt.MapFrom(u => u.Country))
-                .ForMember("City", opt => opt.MapFrom(u => u.City))
-                .ForMember("Avatar", opt => opt.MapFrom(u => u.Avatar))
-                .ForMember("Age", opt => opt.MapFrom(u => u.Age));
             Mapper.CreateMap<ApplicationUser, UserPageViewModel>()
                 .ForMember("Gender", opt => opt.MapFrom(u => (u.Gender == true) ? "Мужской" : "Женский"));
             Mapper.CreateMap<UserPageViewModel, ApplicationUser>()
