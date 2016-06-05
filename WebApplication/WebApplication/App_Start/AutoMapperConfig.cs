@@ -47,8 +47,8 @@ namespace WebApplication
             //    cfg.CreateMap<Event, EventViewModel>();
 
             //});
-            Mapper.AssertConfigurationIsValid();
 
+            Mapper.AssertConfigurationIsValid();
             Mapper.CreateMap<ApplicationUser, PeopleViewModel>();
             Mapper.CreateMap<PeopleViewModel, ApplicationUser>();
             Mapper.CreateMap<ApplicationUser, UserPageViewModel>()

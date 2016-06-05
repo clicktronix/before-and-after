@@ -11,5 +11,7 @@ namespace WebApplication.Models
 
         public virtual IList<Photo> Photos
         { get; set; }
+
+        public ApplicationUser Creator { get; set; }
     }
 }

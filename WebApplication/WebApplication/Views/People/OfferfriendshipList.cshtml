@@ -1,16 +1,80 @@
 ﻿@using Microsoft.AspNet.Identity
+@using WebApplication.Services
 @model List<WebApplication.Models.ViewModels.PeopleViewModel>
 
-@{
-    ViewBag.Title = "title";
+    @{
     Layout = "~/Views/Shared/_Layout.cshtml";
-}
+    }
 
-<h2>title</h2>
-<h2 style="text-align: center">Заявки в друзья</h2>
-<h3>@ViewBag.Result</h3>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/scripts")
+    @Scripts.Render("~/scripts/jquery.unobtrusive-ajax.js")
 
-@Html.ActionLink("Список друзей", "FriendshipList", "People", new{ id = @User.Identity.GetUserId() },
-new { @class = "btn btn-primary", style = "position: absolute; left: 700px; top: 20px" })
 
-@Html.Partial("UsersList", Model)
+<div class="row">
+    @{
+        PeopleService peopleService = new PeopleService();
+        if (User != null)
+        {
+            ViewBag.CountOffersFriendships = peopleService.GetCountOffersFriendships(User.Identity.GetUserId());
+            peopleService.SetDateOfActivity(User.Identity.GetUserId());
+        }
+    }
+
+    <div class="col-lg-2">
+        <div class="visible-xs">
+            <a href="/Account/UserPage">
+                Мой&nbsp;профиль
+            </a>
+        </div>
+        <div class="visible-xs">
+            <a href="/People/ShowFriendsOrOffers">
+                Друзья
+                @if (ViewBag.CountOffersFriendships > 0)
+                {
+                    <span class="badge span_friends">@ViewBag.CountOffersFriendships</span>
+                }
+            </a>
+        </div>
+        <div class="visible-xs">@Html.ActionLink("Новости", "AllEvents", "Event")</div>
+        <div class="visible-xs">
+            <hr style="border-color: black; margin-top: -1px;"/>
+        </div>
+        @*<div>@Html.ActionLink("Пользователи", "ShowUsers", "People", null, new {@class = "headMenu"})</div>*@
+        <div class="container form-horizontal">
+            <br/>
+            <div class="container-fluid">
+                <!--Боковая панель меню-->
+                <div class="row-fluid row">
+                    <div class="col-lg-2 col-md-2 hidden-xs col-sm-1" style="font-weight: bold">
+                        <ul class="nav nav-list menu">
+                            <li>
+                                <a href="/Manage/UserPage">
+                                    Мой&nbsp;профиль
+                                </a>
+                            </li>
+                            <li>@Html.ActionLink("Редактировать", "Edit", "Manage", FormMethod.Post, new {@class = "modal-link"})</li>
+                            <li>
+                                <a href="/People/ShowFriendsOrOffers">
+                                    Друзья
+                                    @if (ViewBag.CountOffersFriendships > 0)
+                                    {
+                                        <span class="badge span_friends">@ViewBag.CountOffersFriendships</span>
+                                    }
+                                </a>
+                            </li>
+                            <li>@Html.ActionLink("Смена пароля", "ChangePassword", "Manage", FormMethod.Post, new {@class = "modal-link"})</li>
+                            <li>@Html.ActionLink("Новости", "AllEvents", "Event")</li>
+                            <li>@Html.ActionLink("Пользователи", "ShowUsers", "People")</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-offset-2" style="margin-top: 25px" id="userList">
+        @Html.Partial("UsersList", Model)
+        @Html.ActionLink("Список друзей", "FriendshipList", "People", new {id = @User.Identity.GetUserId()},
+        new {@class = "btn btn-success", style = "margin-left: 400px"})</div>
+</div>

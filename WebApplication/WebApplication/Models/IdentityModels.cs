@@ -89,6 +89,7 @@ namespace WebApplication.Models
         public DbSet<Friendship> Friendships { get; set; }
         public DbSet<OfferFriendship> OfferFriendships { get; set; }
         public DbSet<Photo> Photos { get; set; }
+        public DbSet<Gallery> Galleries { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -123,9 +124,9 @@ namespace WebApplication.Models
             modelBuilder.Entity<Event>()
                 .HasRequired(e => e.Sender);
 
-            modelBuilder.Entity<Photo>().
-                HasRequired(p => p.Sender).
-                WithMany(u => u.Photos);
+            //modelBuilder.Entity<Photo>().
+            //    HasRequired(p => p.Sender).
+            //    WithMany(u => u.Photos);
         }
     }
 }

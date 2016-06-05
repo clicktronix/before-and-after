@@ -5,7 +5,6 @@ namespace WebApplication.Models.DomainModels
 {
     public class Photo
     {
-        [Key]
         public int PhotoId { get; set; }
 
         [Display(Name = "Описание")]

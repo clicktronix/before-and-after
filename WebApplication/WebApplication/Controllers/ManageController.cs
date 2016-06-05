@@ -361,7 +361,7 @@ namespace WebApplication.Controllers
             _db.Entry(user).State = EntityState.Modified;
             _db.SaveChanges();
 
-            return RedirectToAction("Index", "Manage", model);
+            return RedirectToAction("UserPage", "Manage", model);
         }
 
         //Users page
