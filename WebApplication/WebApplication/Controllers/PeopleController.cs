@@ -1,4 +1,4 @@
-п»їusing System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
@@ -12,11 +12,10 @@ using WebApplication.Services;
 namespace WebApplication.Controllers
 {
     [Authorize]
-    // РєРѕРЅС‚СЂРѕР»Р»РµСЂ, РіРґРµ Р±СѓРґСѓС‚ РјРµС‚РѕРґС‹ РґР»СЏ РІР·Р°РёРјРѕРґРµР№СЃС‚РІРёСЏ СЃ РґСЂСѓРіРёРјРё РїРѕР»СЊР·РѕРІР°С‚РµР»СЏРјРё
-    public class PeopleController : Controller
+	public class PeopleController : Controller
     {
-        // РєР°Рє Рё РґСЂСѓРіРёРµ РєРѕРЅС‚СЂРѕР»Р»РµСЂС‹, СЃРѕРґРµСЂР¶РёС‚ РІ СЃРµР±Рµ РІРѕС‚ С‚Р°РєРѕР№ СЃРµСЂРІРёСЃ
-        private readonly PeopleService _peopleService;
+        // как и другие контроллеры, содержит в себе вот такой сервис
+        private readonly WebApplication.Services.PeopleService _peopleService;
 
         public PeopleController()
         {
@@ -46,7 +45,7 @@ namespace WebApplication.Controllers
                     break;
             }
 
-            // РїРѕР»СѓС‡РёС‚СЊ СЃРµР±СЏ
+            // получить себя
             var currentUser = _peopleService.GetUser(User.Identity.GetUserId());
 
             List<PeopleViewModel> viewUsers = Mapper.Map<IEnumerable<ApplicationUser>, List<PeopleViewModel>>(users);
@@ -73,7 +72,7 @@ namespace WebApplication.Controllers
                 return FriendshipList(User.Identity.GetUserId());
         }
 
-        // Р’СЊСЋ СЃ РїСЂРёРіР»Р°С€РµРЅРёСЏРјРё РІ РґСЂСѓР·СЊСЏ
+        // Вью с приглашениями в друзья
         public ActionResult OfferfriendshipList()
         {
             var viewUsers = _peopleService.GetAllFriendshipOffers(User.Identity.GetUserId());
@@ -101,8 +100,8 @@ namespace WebApplication.Controllers
             return View("CommonFriendshipList", friends);
         }
 
-        #region Р Р°Р±РѕС‚Р° СЃ Р”СЂСѓР¶Р±РѕР№ (AJAX)
-        // РћС‚РїСЂР°РІР»СЏРµРј Р·Р°СЏРІРєСѓ РІ РґСЂСѓР·СЊСЏ (AJAX)
+        #region Работа с Дружбой (AJAX)
+        // Отправляем заявку в друзья (AJAX)
         [HttpPost]
         public ActionResult SendOfferFriendship(string friendId)
         {
@@ -112,8 +111,8 @@ namespace WebApplication.Controllers
                 {
                     Sender = _peopleService.GetUser(User.Identity.GetUserId()),
                     Text = _peopleService.GetUser(User.Identity.GetUserId()).Name +
-                    (_peopleService.GetUser(User.Identity.GetUserId()).Gender == true ? " РїСЂРёРіР»Р°СЃРёР» " : " РїСЂРёРіР»Р°СЃРёР»Р° ")
-                    + _peopleService.GetUser(friendId).Name + " РІ РґСЂСѓР·СЊСЏ.",
+                    (_peopleService.GetUser(User.Identity.GetUserId()).Gender == true ? " пригласил " : " пригласила ")
+                    + _peopleService.GetUser(friendId).Name + " в друзья.",
                     Date = DateTime.Now,
                     Image = null,
                     EventType = EventType.OfferFriendship,
@@ -121,18 +120,18 @@ namespace WebApplication.Controllers
                 };
 
                 _peopleService.MakeEvent(_event);
-                ViewBag.Result = "Р—Р°СЏРІРєР° РІ РґСЂСѓР·СЊСЏ РѕС‚РїСЂР°РІР»РµРЅР°.";
+                ViewBag.Result = "Заявка в друзья отправлена.";
             }
             else
             {
-                ViewBag.Result = "Р§С‚Рѕ-С‚Рѕ РїРѕС€Р»Рѕ РЅРµ С‚Р°Рє";
+                ViewBag.Result = "Что-то пошло не так";
             }
 
             //return Redirect(HttpContext.Request.UrlReferrer.ToString());
             return PartialView("FriendshipButtonStatus", friendId);
         }
 
-        // РЈРґР°Р»СЏРµРј РёР· РґСЂСѓР·РµР№ (AJAX)
+        // Удаляем из друзей (AJAX)
         [HttpPost]
         public ActionResult DeleteFriendship(string friendId)
         {
@@ -142,8 +141,8 @@ namespace WebApplication.Controllers
                 {
                     Sender = _peopleService.GetUser(User.Identity.GetUserId()),
                     Text = _peopleService.GetUser(User.Identity.GetUserId()).Name +
-                    (_peopleService.GetUser(User.Identity.GetUserId()).Gender == true ? " СѓРґР°Р»РёР» " : " СѓРґР°Р»РёР»Р° ")
-                    + " РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ " + _peopleService.GetUser(friendId).Name + " РёР· СЃРїРёСЃРєР° СЃРІРѕРёС… РґСЂСѓР·РµР№.",
+                    (_peopleService.GetUser(User.Identity.GetUserId()).Gender == true ? " удалил " : " удалила ")
+                    + " пользователя " + _peopleService.GetUser(friendId).Name + " из списка своих друзей.",
 
                     Date = DateTime.Now,
                     Image = null,
@@ -151,17 +150,17 @@ namespace WebApplication.Controllers
                     Owners = { _peopleService.GetUser(User.Identity.GetUserId()), _peopleService.GetUser(friendId) }
                 };
                 _peopleService.MakeEvent(_event);
-                ViewBag.Result = "РЈРґР°Р»РµРЅРёРµ РёР· РґСЂСѓР·РµР№ РїСЂРѕРёР·РІРµРґРµРЅРѕ";
+                ViewBag.Result = "Удаление из друзей произведено";
             }
             else
             {
-                ViewBag.Result = "Р§С‚Рѕ-С‚Рѕ РїРѕС€Р»Рѕ РЅРµ С‚Р°Рє";
+                ViewBag.Result = "Что-то пошло не так";
             }
 
             return PartialView("FriendshipButtonStatus", friendId);
         }
 
-        // РџРѕРґС‚РІРµСЂР¶РґР°РµРј Р·Р°СЏРІРєСѓ РІ РґСЂСѓР·СЊСЏ (AJAX)
+        // Подтверждаем заявку в друзья (AJAX)
         [HttpPost]
         public ActionResult ConfirmOfferFriendship(string friendId)
         {
@@ -171,8 +170,8 @@ namespace WebApplication.Controllers
                 {
                     Sender = _peopleService.GetUser(User.Identity.GetUserId()),
                     Text = _peopleService.GetUser(User.Identity.GetUserId()).Name +
-                    (_peopleService.GetUser(User.Identity.GetUserId()).Gender == true ? " РїРѕРґС‚РІРµСЂРґРёР» " : " РїРѕРґС‚РІРµСЂРґРёР»Р° ")
-                    + "Р·Р°СЏРІРєСѓ РІ РґСЂСѓР·СЊСЏ РѕС‚ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ " + _peopleService.GetUser(friendId).Name + ".",
+                    (_peopleService.GetUser(User.Identity.GetUserId()).Gender == true ? " подтвердил " : " подтвердила ")
+                    + "заявку в друзья от пользователя " + _peopleService.GetUser(friendId).Name + ".",
 
                     Date = DateTime.Now,
                     Image = null,
@@ -180,18 +179,18 @@ namespace WebApplication.Controllers
                     Owners = { _peopleService.GetUser(User.Identity.GetUserId()), _peopleService.GetUser(friendId) }
                 };
                 _peopleService.MakeEvent(_event);
-                ViewBag.Result = "Р—Р°СЏРІРєР° РїСЂРёРЅСЏС‚Р°";
+                ViewBag.Result = "Заявка принята";
             }
             else
             {
-                ViewBag.Result = "Р§С‚Рѕ-С‚Рѕ РїРѕС€Р»Рѕ РЅРµ С‚Р°Рє";
+                ViewBag.Result = "Что-то пошло не так";
             }
 
             //return Redirect(HttpContext.Request.UrlReferrer.ToString());
             return PartialView("FriendshipButtonStatus", friendId);
         }
 
-        // РћС‚РєР»РѕРЅСЏРµРј Р·Р°СЏРІРєСѓ РІ РґСЂСѓР·СЊСЏ (AJAX)
+        // Отклоняем заявку в друзья (AJAX)
         [HttpPost]
         public ActionResult DontConfirmOfferFriendship(string friendId)
         {
@@ -201,8 +200,8 @@ namespace WebApplication.Controllers
                 {
                     Sender = _peopleService.GetUser(User.Identity.GetUserId()),
                     Text = _peopleService.GetUser(User.Identity.GetUserId()).Name +
-                    (_peopleService.GetUser(User.Identity.GetUserId()).Gender == true ? " РѕС‚РєР»РѕРЅРёР» " : " РѕС‚РєР»РѕРЅРёР»Р° ")
-                    + "Р·Р°СЏРІРєСѓ РІ РґСЂСѓР·СЊСЏ РѕС‚ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ " + _peopleService.GetUser(friendId).Name + ".",
+                    (_peopleService.GetUser(User.Identity.GetUserId()).Gender == true ? " отклонил " : " отклонила ")
+                    + "заявку в друзья от пользователя " + _peopleService.GetUser(friendId).Name + ".",
 
                     Date = DateTime.Now,
                     Image = null,
@@ -210,18 +209,18 @@ namespace WebApplication.Controllers
                     Owners = { _peopleService.GetUser(User.Identity.GetUserId()), _peopleService.GetUser(friendId) }
                 };
                 _peopleService.MakeEvent(_event);
-                ViewBag.Result = "Р—Р°СЏРІРєР° РІ РґСЂСѓР·СЊСЏ РѕС‚РєР»РѕРЅРµРЅР°.";
+                ViewBag.Result = "Заявка в друзья отклонена.";
             }
             else
             {
-                ViewBag.Result = "Р§С‚Рѕ-С‚Рѕ РїРѕС€Р»Рѕ РЅРµ С‚Р°Рє";
+                ViewBag.Result = "Что-то пошло не так";
             }
 
             //return Redirect(HttpContext.Request.UrlReferrer.ToString());
             return PartialView("FriendshipButtonStatus", friendId);
         }
 
-        // РћС‚РјРµРЅСЏРµРј Р·Р°СЏРІРєСѓ РІ РґСЂСѓР·СЊСЏ (AJAX)
+        // Отменяем заявку в друзья (AJAX)
         [HttpPost]
         public ActionResult CancelOfferFriendship(string friendId)
         {
@@ -231,8 +230,8 @@ namespace WebApplication.Controllers
                 {
                     Sender = _peopleService.GetUser(User.Identity.GetUserId()),
                     Text = _peopleService.GetUser(User.Identity.GetUserId()).Name +
-                    (_peopleService.GetUser(User.Identity.GetUserId()).Gender == true ? " РѕС‚РјРµРЅРёР» " : " РѕС‚РјРµРЅРёР»Р° ")
-                    + "Р·Р°СЏРІРєСѓ РІ РґСЂСѓР·СЊСЏ Рє РїРѕР»СЊР·РѕРІР°С‚РµР»СЋ " + _peopleService.GetUser(friendId).Name + ".",
+                    (_peopleService.GetUser(User.Identity.GetUserId()).Gender == true ? " отменил " : " отменила ")
+                    + "заявку в друзья к пользователю " + _peopleService.GetUser(friendId).Name + ".",
 
                     Date = DateTime.Now,
                     Image = null,
@@ -240,11 +239,11 @@ namespace WebApplication.Controllers
                     Owners = { _peopleService.GetUser(User.Identity.GetUserId()), _peopleService.GetUser(friendId) }
                 };
                 _peopleService.MakeEvent(_event);
-                ViewBag.Result = "Р—Р°СЏРІРєР° РІ РґСЂСѓР·СЊСЏ РѕС‚РјРµРЅРµРЅР°.";
+                ViewBag.Result = "Заявка в друзья отменена.";
             }
             else
             {
-                ViewBag.Result = "Р§С‚Рѕ-С‚Рѕ РїРѕС€Р»Рѕ РЅРµ С‚Р°Рє";
+                ViewBag.Result = "Что-то пошло не так";
             }
 
             //return Redirect(HttpContext.Request.UrlReferrer.ToString());
@@ -252,7 +251,7 @@ namespace WebApplication.Controllers
         }
         #endregion
 
-        #region РџРѕР»СѓС‡РµРЅРёРµ СЃРїРёСЃРєР° РїРѕР»СЊР·РѕРІР°С‚РµР»РµР№ (AJAX)
+        #region Получение списка пользователей (AJAX)
 
         [HttpPost]
         public ActionResult GetUsersList(string userId, string gender, bool online, string name, string surname, bool commonFriends)
@@ -292,7 +291,7 @@ namespace WebApplication.Controllers
             if (surname != null)
                 users = users.Where(u => u.Surname.StartsWith(surname, StringComparison.OrdinalIgnoreCase)).ToList();
 
-            // РњР°РїРїРёРј РєРѕР»Р»РµРєС†РёСЋ ApplicationUser-РѕРІ РІ РєРѕР»Р»РµРєС†РёСЋ PeopleViewModel-РѕРІ
+            // Маппим коллекцию ApplicationUser-ов в коллекцию PeopleViewModel-ов
             viewUsers = Mapper.Map<IEnumerable<ApplicationUser>, List<PeopleViewModel>>(users);
             return PartialView("UsersList", viewUsers);
         }

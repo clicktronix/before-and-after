@@ -1,21 +1,17 @@
-п»їusing System;
-using System.Collections.Generic;
+using System;
 using System.Linq;
-using System.Web;
-using AutoMapper;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using WebApplication.Models.DomainModels;
-using WebApplication.Models.ViewModels;
 using WebApplication.Services;
 
 namespace WebApplication.Controllers
 {
     [Authorize]
-    public class EventController : Controller
+	public class EventController : Controller
     {
-        // РєР°Рє Рё РґСЂСѓРіРёРµ РєРѕРЅС‚СЂРѕР»Р»РµСЂС‹, СЃРѕРґРµСЂР¶РёС‚ РІ СЃРµР±Рµ РІРѕС‚ С‚Р°РєРѕР№ СЃРµСЂРІРёСЃ
-        private readonly PeopleService _peopleService;
+        // как и другие контроллеры, содержит в себе вот такой сервис
+        private readonly WebApplication.Services.PeopleService _peopleService;
 
         public EventController()
         {

@@ -1,4 +1,4 @@
-п»їusing System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -13,7 +13,7 @@ namespace WebApplication.Controllers
 {
     public class HomeController : Controller
     {
-        readonly ApplicationDbContext _db = new ApplicationDbContext();
+        private readonly WebApplication.Models.ApplicationDbContext _db = new ApplicationDbContext();
 
         public ActionResult Index()
         {
@@ -63,13 +63,13 @@ namespace WebApplication.Controllers
                 return View(photo);
             if (files.Count() == 0 || files.FirstOrDefault() == null)
             {
-                ViewBag.error = "РџРѕР¶Р°Р»СѓР№СЃС‚Р°, РІС‹Р±РµСЂРёС‚Рµ С„Р°Р№Р»";
+                ViewBag.error = "Пожалуйста, выберите файл";
                 return View(photo);
             }
 
             if (files.Count() > 1 || files.FirstOrDefault() == null)
             {
-                ViewBag.error = "РњРѕР¶РЅРѕ Р·Р°РіСЂСѓР·РёС‚СЊ С‚РѕР»СЊРєРѕ 1 С„Р°Р№Р»";
+                ViewBag.error = "Можно загрузить только 1 файл";
                 return View(photo);
             }
             
